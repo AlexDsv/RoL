@@ -7,6 +7,7 @@ import { ITEMS } from "./data/items";
 import { BARON, DRAGONS, JUNGLE } from "./data/monsters";
 import { buyItem, finishBattle, newRun, sellItem, startBattle } from "./run";
 import { playBattle, simulateRun } from "./sim";
+import { describeSpell, formula } from "./describe";
 import type { BattleState } from "./types";
 
 function duel(a: string, b: string, level = 5, seed = 42): BattleState {
@@ -125,5 +126,25 @@ describe("partie", () => {
       const result = simulateRun(id, 5);
       expect(result.won || result.diedTo !== null).toBe(true);
     }
+  });
+});
+
+describe("descriptions détaillées", () => {
+  it("chaque sort a au moins une ligne, chiffrée en combat pour les dégâts", () => {
+    for (const c of [...CHAMPIONS, ...JUNGLE, ...DRAGONS, BARON]) {
+      const b = createBattle(createCombatant(c, 9), createCombatant(getFighter("garen"), 9), 1);
+      for (const s of c.spells) {
+        const lines = describeSpell(s, c, { state: b, side: "player" });
+        expect(lines.length).toBeGreaterThan(0);
+        for (const line of lines) {
+          if (line.tone === "physical" || line.tone === "magic") expect(line.value).toMatch(/\d/);
+        }
+      }
+    }
+  });
+
+  it("la formule intègre les coefficients cachés", () => {
+    expect(formula({ base: 100, ad: 1 }, 1.3)).toBe("130 + 130 % AD");
+    expect(formula({ base: 0, perLevel: 10 }, 1)).toBe("0 (+10 par niveau)");
   });
 });

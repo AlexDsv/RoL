@@ -112,8 +112,8 @@ export interface FighterDef {
   name: string;
   title: string;
   archetype: Archetype;
-  /** Clé Data Dragon (champions) ou identifiant d'icône (monstres). */
-  art: { kind: "champion"; ddKey: string } | { kind: "monster"; emoji: string; color: string };
+  /** Clé Data Dragon (champions) ; pour les monstres, dossier CommunityDragon et repli emoji. */
+  art: { kind: "champion"; ddKey: string } | { kind: "monster"; emoji: string; color: string; cdragon: string };
   stats: BaseStats;
   passive: PassiveDef;
   spells: SpellDef[];

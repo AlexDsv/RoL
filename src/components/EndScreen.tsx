@@ -4,7 +4,7 @@ import { getFighter } from "@/game/data/fighters";
 import { getItem } from "@/game/data/items";
 import { playerLevel, type RunState } from "@/game/run";
 import type { Meta } from "@/lib/storage";
-import { ItemIcon, Portrait } from "./ui";
+import { FighterCard, ItemIcon } from "./ui";
 
 export function EndScreen({ run, meta, onNewGame, onHome }: { run: RunState; meta: Meta; onNewGame: () => void; onHome: () => void }) {
   const won = run.status === "won";
@@ -25,11 +25,11 @@ export function EndScreen({ run, meta, onNewGame, onHome }: { run: RunState; met
               : `Partie abandonnée à l'étape ${run.stage + 1}.`}
         </p>
         <div className="mt-6 flex items-center justify-center gap-4">
-          <Portrait def={champion} className="h-20 w-20 border border-gold" />
+          <FighterCard def={champion} className="w-32 sm:w-40" />
           {killer && (
             <>
               <span className="title text-2xl text-dim">vs</span>
-              <Portrait def={killer} className="h-20 w-20 border border-blood/70 grayscale-0" />
+              <FighterCard def={killer} tone="blood" className="w-32 sm:w-40" />
             </>
           )}
         </div>

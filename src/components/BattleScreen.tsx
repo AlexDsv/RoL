@@ -7,8 +7,8 @@ import { getItem } from "@/game/data/items";
 import { canUsePotion, drinkPotion, type RunState } from "@/game/run";
 import type { Action, BattleState, Combatant, LogEntry, Side, SpellKey } from "@/game/types";
 import { ddragon } from "@/lib/ddragon";
-import { KeyBadge, SpellIcon } from "./Kit";
-import { ArchetypeChip, Bar, fmt, ItemIcon, Portrait, RemoteImg, StatusList } from "./ui";
+import { KeyBadge, SpellDetail, SpellIcon, type KitSlot } from "./Kit";
+import { ArchetypeChip, Bar, FighterCard, fmt, ItemIcon, RemoteImg, StatusList } from "./ui";
 
 /** Délai avant que l'adversaire joue, pour laisser lire l'action précédente. */
 const ENEMY_DELAY_MS = 900;
@@ -19,10 +19,17 @@ interface Props {
   onFinish: () => void;
 }
 
+/** Ce que le panneau de détail affiche : un sort du joueur ou de l'adversaire. */
+interface Focus {
+  side: Side;
+  slot: KitSlot;
+}
+
 export function BattleScreen({ run, update, onFinish }: Props) {
   const battle = run.battle!;
   const enemyDef = defOf(battle.enemy);
   const enemyTurn = battle.turn === "enemy" && !battle.winner;
+  const [focus, setFocus] = useState<Focus | null>(null);
 
   useEffect(() => {
     if (!enemyTurn) return;
@@ -36,7 +43,7 @@ export function BattleScreen({ run, update, onFinish }: Props) {
     update((r) => (r.battle && r.battle.turn === "player" && !r.battle.winner ? { ...r, battle: act(r.battle, action) } : r));
 
   return (
-    <div className="animate-fade-in relative space-y-3">
+    <div className="animate-fade-in relative">
       <div aria-hidden="true" className="pointer-events-none fixed inset-0 -z-10 opacity-25">
         {enemyDef.art.kind === "champion" ? (
           <RemoteImg src={ddragon.splash(enemyDef.art.ddKey)} alt="" className="h-full w-full object-cover blur-[2px]" fallback={null} />
@@ -46,26 +53,71 @@ export function BattleScreen({ run, update, onFinish }: Props) {
         <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(1,10,19,0.4),rgba(1,10,19,0.95))]" />
       </div>
 
-      <div className="flex items-center justify-between text-sm">
-        <span className="chip">
-          Étape {run.stage + 1} / {run.ladder.length}
-        </span>
-        <span className="text-muted">
-          Round {battle.round} ·{" "}
-          {battle.winner ? "Combat terminé" : enemyTurn ? <span className="text-blood">Tour de l&apos;adversaire…</span> : <span className="text-leaf">À toi de jouer</span>}
-        </span>
+      <div className="grid grid-cols-2 items-start gap-3 lg:grid-cols-[minmax(0,16rem)_minmax(0,1fr)_minmax(0,16rem)] lg:gap-5">
+        <FighterColumn
+          c={battle.player}
+          side="player"
+          active={battle.turn === "player" && !battle.winner}
+          onFocus={(slot) => setFocus({ side: "player", slot })}
+          className="lg:col-start-1 lg:row-start-1"
+        />
+        <FighterColumn
+          c={battle.enemy}
+          side="enemy"
+          active={enemyTurn}
+          onFocus={(slot) => setFocus({ side: "enemy", slot })}
+          className="lg:col-start-3 lg:row-start-1"
+        />
+
+        <div className="col-span-2 space-y-3 lg:col-span-1 lg:col-start-2 lg:row-start-1">
+          <div className="flex items-center justify-between text-sm">
+            <span className="chip">
+              Étape {run.stage + 1} / {run.ladder.length}
+            </span>
+            <span className="text-muted">
+              Round {battle.round} ·{" "}
+              {battle.winner ? (
+                "Combat terminé"
+              ) : enemyTurn ? (
+                <span className="text-blood">Tour de l&apos;adversaire…</span>
+              ) : (
+                <span className="text-leaf">À toi de jouer</span>
+              )}
+            </span>
+          </div>
+          <CombatLog log={battle.log} />
+          <ActionBar
+            battle={battle}
+            run={run}
+            onAction={play}
+            onPotion={(id) => update((r) => drinkPotion(r, id))}
+            onFocus={(slot) => setFocus({ side: "player", slot })}
+          />
+          <DetailPanel battle={battle} focus={focus} />
+        </div>
       </div>
-
-      <FighterPanel c={battle.enemy} side="enemy" active={enemyTurn} />
-
-      <CombatLog log={battle.log} />
-
-      <FighterPanel c={battle.player} side="player" active={battle.turn === "player" && !battle.winner} />
-
-      <ActionBar battle={battle} run={run} onAction={play} onPotion={(id) => update((r) => drinkPotion(r, id))} />
 
       {battle.winner && <ResultOverlay battle={battle} onContinue={onFinish} />}
     </div>
+  );
+}
+
+function DetailPanel({ battle, focus }: { battle: BattleState; focus: Focus | null }) {
+  return (
+    <section className="panel min-h-40 p-4" aria-live="polite" aria-label="Détail du sort">
+      {focus ? (
+        <>
+          <p className={`mb-2 text-[11px] font-bold uppercase tracking-wider ${focus.side === "enemy" ? "text-blood" : "text-gold"}`}>
+            {focus.side === "enemy" ? `Adversaire : ${battle.enemy.name}` : battle.player.name}
+          </p>
+          <SpellDetail def={defOf(battle[focus.side])} slot={focus.slot} ctx={{ state: battle, side: focus.side }} />
+        </>
+      ) : (
+        <p className="py-8 text-center text-sm text-muted">
+          Survole un sort (le tien ou celui de l&apos;adversaire) pour voir son effet détaillé et les dégâts qu&apos;il infligerait maintenant.
+        </p>
+      )}
+    </section>
   );
 }
 
@@ -80,42 +132,51 @@ function useHit(hp: number) {
   return hit;
 }
 
-function FighterPanel({ c, side, active }: { c: Combatant; side: Side; active: boolean }) {
+function FighterColumn({
+  c,
+  side,
+  active,
+  onFocus,
+  className = "",
+}: {
+  c: Combatant;
+  side: Side;
+  active: boolean;
+  onFocus: (slot: KitSlot) => void;
+  className?: string;
+}) {
   const def = defOf(c);
   const stats = effectiveStats(c);
   const shield = totalShield(c);
   const hit = useHit(c.hp);
   const resourceLabel = def.stats.resource === "energy" ? "Énergie" : "Mana";
   return (
-    <section
-      className={`panel flex items-center gap-3 p-3 sm:gap-4 sm:p-4 ${active ? "border-gold/70" : ""} ${side === "enemy" ? "border-blood/40" : ""}`}
-      aria-label={side === "enemy" ? "Adversaire" : "Ton champion"}
-    >
-      <div className="relative shrink-0">
-        <div key={hit.key} className={hit.key > 0 && hit.delta < 0 ? "animate-shake" : ""}>
-          <Portrait def={def} className={`h-16 w-16 sm:h-24 sm:w-24 border ${side === "enemy" ? "border-blood/70" : "border-gold"}`} />
-        </div>
-        {hit.key > 0 && (
-          <span
-            key={`n${hit.key}`}
-            aria-hidden="true"
-            className={`animate-rise pointer-events-none absolute inset-x-0 top-1/3 text-center text-xl font-black drop-shadow-[0_2px_2px_rgba(0,0,0,0.9)] ${
-              hit.delta < 0 ? "text-blood" : "text-leaf"
-            }`}
-          >
-            {hit.delta > 0 ? "+" : ""}
-            {fmt(hit.delta)}
-          </span>
-        )}
-        <span className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 rounded-full border border-gold-dark bg-abyss px-1.5 text-[10px] font-black text-gold">
-          {c.level}
-        </span>
+    <section className={`min-w-0 space-y-2 ${className}`} aria-label={side === "enemy" ? "Adversaire" : "Ton champion"}>
+      <div key={hit.key} className={`mx-auto max-w-44 sm:max-w-52 lg:max-w-none ${hit.key > 0 && hit.delta < 0 ? "animate-shake" : ""}`}>
+        <FighterCard
+          def={def}
+          tone={side === "enemy" ? "blood" : "gold"}
+          active={active}
+          subtitle={
+            <span className="inline-flex items-center gap-1.5">
+              <ArchetypeChip def={def} /> niv. {c.level}
+            </span>
+          }
+        >
+          {hit.key > 0 && (
+            <span
+              aria-hidden="true"
+              className={`animate-rise pointer-events-none absolute inset-x-0 top-1/3 text-center text-3xl font-black drop-shadow-[0_2px_3px_rgba(0,0,0,0.95)] ${
+                hit.delta < 0 ? "text-blood" : "text-leaf"
+              }`}
+            >
+              {hit.delta > 0 ? "+" : ""}
+              {fmt(hit.delta)}
+            </span>
+          )}
+        </FighterCard>
       </div>
-      <div className="min-w-0 flex-1 space-y-1.5">
-        <div className="flex flex-wrap items-baseline justify-between gap-x-2">
-          <h2 className="title truncate text-lg sm:text-xl">{c.name}</h2>
-          <ArchetypeChip def={def} />
-        </div>
+      <div className="panel space-y-1.5 p-2.5">
         <Bar
           value={c.hp}
           max={stats.maxHp}
@@ -136,8 +197,36 @@ function FighterPanel({ c, side, active }: { c: Combatant; side: Side; active: b
           />
         )}
         <StatusList c={c} />
+        {side === "enemy" && <MiniKit c={c} onFocus={onFocus} />}
       </div>
     </section>
+  );
+}
+
+/** Icônes des sorts de l'adversaire, avec leur recharge ; le survol affiche le détail. */
+function MiniKit({ c, onFocus }: { c: Combatant; onFocus: (slot: KitSlot) => void }) {
+  const def = defOf(c);
+  const slots: KitSlot[] = ["P", ...def.spells.map((s) => s.key)];
+  return (
+    <ul className="flex flex-wrap gap-1.5 border-t border-line/70 pt-2" aria-label="Sorts de l'adversaire">
+      {slots.map((slot) => (
+        <li key={slot}>
+          <button
+            type="button"
+            className="relative block rounded-md focus-visible:outline-2 focus-visible:outline-teal"
+            onMouseEnter={() => onFocus(slot)}
+            onFocus={() => onFocus(slot)}
+            onClick={() => onFocus(slot)}
+            aria-label={slot === "P" ? def.passive.name : findSpell(c, slot as SpellKey)?.name}
+          >
+            <SpellIcon def={def} spellKey={slot === "attack" ? "P" : slot} className="h-8 w-8" />
+            {slot !== "P" && slot !== "attack" && c.cooldowns[slot] > 0 && (
+              <span className="absolute inset-0 grid place-items-center rounded-md bg-black/70 text-sm font-black">{c.cooldowns[slot]}</span>
+            )}
+          </button>
+        </li>
+      ))}
+    </ul>
   );
 }
 
@@ -151,15 +240,15 @@ const TONE_CLASS: Record<NonNullable<LogEntry["tone"]>, string> = {
 };
 
 function CombatLog({ log }: { log: LogEntry[] }) {
-  const recent = log.slice(-8).reverse();
+  const recent = log.slice(-12).reverse();
   return (
-    <section className="panel max-h-44 overflow-hidden px-4 py-2 text-xs sm:text-sm" aria-label="Journal de combat" aria-live="polite">
+    <section className="panel h-36 overflow-hidden px-4 py-2 text-xs sm:h-52 sm:text-sm lg:h-64" aria-label="Journal de combat" aria-live="polite">
       <ul className="space-y-0.5">
         {recent.map((entry, i) => (
           <li
             key={log.length - i}
             className={`${TONE_CLASS[entry.tone ?? "info"]} ${i === 0 ? "animate-fade-in" : ""}`}
-            style={{ opacity: 1 - i * 0.09 }}
+            style={{ opacity: 1 - i * 0.065 }}
           >
             <span
               aria-hidden="true"
@@ -195,11 +284,13 @@ function ActionBar({
   run,
   onAction,
   onPotion,
+  onFocus,
 }: {
   battle: BattleState;
   run: RunState;
   onAction: (a: Action) => void;
   onPotion: (itemId: string) => void;
+  onFocus: (slot: KitSlot) => void;
 }) {
   const me = battle.player;
   const def = defOf(me);
@@ -215,7 +306,8 @@ function ActionBar({
           className="group flex flex-col items-center gap-1 rounded-lg border border-line bg-black/25 p-2 text-center transition-colors enabled:hover:border-gold disabled:opacity-40"
           disabled={!canAct}
           onClick={() => onAction({ kind: "attack" })}
-          title="Attaque de base : peut frapper deux fois et infliger un coup critique."
+          onMouseEnter={() => onFocus("attack")}
+          onFocus={() => onFocus("attack")}
         >
           <span className="grid h-11 w-11 place-items-center rounded-md border border-gold-dark/70 bg-panel-2 sm:h-12 sm:w-12">
             <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true" className="text-gold">
@@ -238,7 +330,9 @@ function ActionBar({
               className="group relative flex flex-col items-center gap-1 rounded-lg border border-line bg-black/25 p-2 text-center transition-colors enabled:hover:border-gold disabled:opacity-40"
               disabled={!canAct || block !== null}
               onClick={() => onAction({ kind: "spell", key })}
-              title={`${spell.name} (${key}) : ${spell.description}${block ? ` — ${BLOCK_TEXT[block]}` : ""}`}
+              onMouseEnter={() => onFocus(key)}
+              onFocus={() => onFocus(key)}
+              title={block ? BLOCK_TEXT[block] : undefined}
             >
               <span className="relative">
                 <SpellIcon def={def} spellKey={key} className="h-11 w-11 sm:h-12 sm:w-12" />
@@ -258,6 +352,16 @@ function ActionBar({
           );
         })}
       </div>
+      <button
+        type="button"
+        className="flex w-full items-center gap-2 rounded-lg border border-line/70 bg-black/20 px-2 py-1.5 text-left text-xs text-muted hover:border-gold/60"
+        onMouseEnter={() => onFocus("P")}
+        onFocus={() => onFocus("P")}
+        onClick={() => onFocus("P")}
+      >
+        <SpellIcon def={def} spellKey="P" className="h-6 w-6" />
+        Passif : <span className="font-bold text-gold-bright">{def.passive.name}</span>
+      </button>
       {potions.length > 0 && (
         <div className="flex flex-wrap items-center gap-2 border-t border-line/70 pt-3">
           <span className="text-xs text-muted">Potions (ne terminent pas le tour) :</span>

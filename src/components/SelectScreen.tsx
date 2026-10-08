@@ -7,7 +7,7 @@ import { ARCHETYPE_LABELS } from "@/game/data/fighters";
 import type { Archetype } from "@/game/types";
 import { ddragon } from "@/lib/ddragon";
 import { Kit } from "./Kit";
-import { ArchetypeChip, Portrait, RemoteImg, StatGrid } from "./ui";
+import { ArchetypeChip, FighterCard, RemoteImg, StatGrid } from "./ui";
 
 const FILTERS: (Archetype | "all")[] = ["all", "fighter", "tank", "assassin", "mage", "marksman", "support"];
 
@@ -41,26 +41,25 @@ export function SelectScreen({ onStart, onBack }: { onStart: (championId: string
         ))}
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-[1fr_1.15fr]">
-        <ul className="grid grid-cols-4 content-start gap-2 sm:grid-cols-5">
+      <div className="grid items-start gap-4 lg:grid-cols-[1.45fr_1fr]">
+        <ul className="grid grid-cols-3 gap-2.5 sm:grid-cols-4 xl:grid-cols-5">
           {visible.map((c) => (
             <li key={c.id}>
               <button
                 type="button"
                 onClick={() => setSelectedId(c.id)}
                 aria-pressed={c.id === selectedId}
-                className={`group w-full rounded-xl border p-1.5 text-center transition-colors ${
-                  c.id === selectedId ? "border-gold bg-gold/10 animate-glow" : "border-line bg-panel/60 hover:border-gold/60"
+                className={`block w-full rounded-xl text-left transition-transform duration-150 hover:-translate-y-1 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal ${
+                  c.id === selectedId ? "" : "opacity-80 hover:opacity-100"
                 }`}
               >
-                <Portrait def={c} className="mx-auto aspect-square w-full" />
-                <span className="mt-1 block truncate text-xs font-bold">{c.name}</span>
+                <FighterCard def={c} active={c.id === selectedId} subtitle={ARCHETYPE_LABELS[c.archetype]} />
               </button>
             </li>
           ))}
         </ul>
 
-        <section className="panel overflow-hidden" aria-live="polite">
+        <section className="panel overflow-hidden lg:sticky lg:top-20" aria-live="polite">
           <div className="relative h-40 sm:h-52">
             <RemoteImg
               src={ddragon.splash(ddKey)}

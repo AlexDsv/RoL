@@ -22,7 +22,7 @@ export function Game() {
   return (
     <>
       <Header />
-      <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-6">
+      <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6">
         {mounted ? <GameScreens /> : <p className="py-20 text-center text-muted">Chargement de la Faille…</p>}
       </main>
       <Footer />
@@ -97,7 +97,7 @@ function Header() {
   return (
     <header className="sticky top-0 z-30 border-b border-gold-dark/50 bg-[linear-gradient(180deg,rgba(9,20,40,0.96),rgba(1,10,19,0.9))] backdrop-blur-md">
       <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 -bottom-px h-px bg-[linear-gradient(90deg,transparent,rgba(200,170,110,0.6)_30%,rgba(10,200,185,0.5)_70%,transparent)]" />
-      <div className="mx-auto flex h-14 max-w-6xl items-center gap-3 px-4">
+      <div className="mx-auto flex h-14 max-w-7xl items-center gap-3 px-4">
         <svg width="26" height="30" viewBox="0 0 26 30" aria-hidden="true">
           <defs>
             <linearGradient id="logo-gold" x1="0" y1="0" x2="0" y2="1">
@@ -120,7 +120,7 @@ function Header() {
 function Footer() {
   return (
     <footer className="mt-10 border-t border-line/70 bg-black/30">
-      <div className="mx-auto max-w-6xl space-y-2 px-4 py-6 text-xs leading-relaxed text-dim">
+      <div className="mx-auto max-w-7xl space-y-2 px-4 py-6 text-xs leading-relaxed text-dim">
         <p>
           <strong className="text-muted">Rift Gauntlet</strong> est un fan-game gratuit et non commercial. Il n&apos;est pas
           approuvé par Riot Games et ne reflète pas les opinions de Riot Games ou de quiconque officiellement impliqué dans la

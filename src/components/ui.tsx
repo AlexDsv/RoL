@@ -5,6 +5,7 @@ import { totalShield } from "@/game/battle";
 import { ARCHETYPE_LABELS } from "@/game/data/fighters";
 import type { ItemDef } from "@/game/data/items";
 import type { Combatant, FighterDef, Stats, Status } from "@/game/types";
+import { useMonsterIconCandidates } from "@/lib/cdragon";
 import { ddragon, useDdragonVersion } from "@/lib/ddragon";
 
 export const fmt = (n: number) => Math.round(n).toLocaleString("fr-FR");
@@ -38,17 +39,31 @@ function Initials({ text, className }: { text: string; className?: string }) {
   );
 }
 
+/** Icône d'un monstre (CommunityDragon), en essayant chaque URL candidate ; emoji en dernier recours. */
+function MonsterArt({ folder, emoji, className, emojiClassName = "text-3xl" }: { folder: string; emoji: string; className?: string; emojiClassName?: string }) {
+  const candidates = useMonsterIconCandidates(folder);
+  const [failed, setFailed] = useState<string[]>([]);
+  const src = candidates.find((url) => !failed.includes(url));
+  if (!src) {
+    return <span className={`drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)] ${emojiClassName}`}>{emoji}</span>;
+  }
+  return (
+    // eslint-disable-next-line @next/next/no-img-element -- images CommunityDragon non optimisables
+    <img src={src} alt="" className={className} draggable={false} onError={() => setFailed((f) => [...f, src])} />
+  );
+}
+
 export function Portrait({ def, className = "w-16 h-16" }: { def: FighterDef; className?: string }) {
   const version = useDdragonVersion();
   if (def.art.kind === "monster") {
     return (
       <span
-        className={`grid place-items-center rounded-lg text-3xl ${className}`}
+        className={`grid place-items-center overflow-hidden rounded-lg ${className}`}
         style={{ background: `radial-gradient(circle at 50% 35%, ${def.art.color}aa, ${def.art.color}22 70%), #0b1626` }}
         role="img"
         aria-label={def.name}
       >
-        <span className="drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">{def.art.emoji}</span>
+        <MonsterArt folder={def.art.cdragon} emoji={def.art.emoji} className="h-full w-full object-cover" />
       </span>
     );
   }
@@ -59,6 +74,70 @@ export function Portrait({ def, className = "w-16 h-16" }: { def: FighterDef; cl
       className={`rounded-lg object-cover ${className}`}
       fallback={<Initials text={def.name} className={`rounded-lg ${className}`} />}
     />
+  );
+}
+
+/**
+ * Carte portrait au format de l'écran de chargement de LoL (308×560).
+ * `skin` prépare le choix de skin : 0 = skin de base.
+ */
+export function FighterCard({
+  def,
+  skin = 0,
+  subtitle,
+  tone = "gold",
+  active = false,
+  className = "",
+  children,
+}: {
+  def: FighterDef;
+  skin?: number;
+  subtitle?: React.ReactNode;
+  tone?: "gold" | "blood";
+  active?: boolean;
+  className?: string;
+  children?: React.ReactNode;
+}) {
+  const border = tone === "blood" ? "border-blood/70" : "border-gold/80";
+  return (
+    <div
+      className={`relative aspect-[308/560] overflow-hidden rounded-xl border-2 bg-panel-2 shadow-[0_18px_40px_-18px_rgba(0,0,0,0.9)] ${border} ${
+        active ? "animate-glow" : ""
+      } ${className}`}
+    >
+      {def.art.kind === "champion" ? (
+        <RemoteImg
+          src={ddragon.loading(def.art.ddKey, skin)}
+          alt={def.name}
+          className="absolute inset-0 h-full w-full object-cover"
+          fallback={
+            <span className="absolute inset-0 grid place-items-center bg-[radial-gradient(circle_at_50%_30%,#1d3550,#091428)] font-display text-5xl font-bold text-gold/70">
+              {def.name.slice(0, 2)}
+            </span>
+          }
+        />
+      ) : (
+        <div
+          className="absolute inset-0 grid place-items-center"
+          style={{ background: `radial-gradient(circle at 50% 38%, ${def.art.color}cc, ${def.art.color}22 62%), linear-gradient(180deg,#0b1626,#050c16)` }}
+          role="img"
+          aria-label={def.name}
+        >
+          <MonsterArt
+            folder={def.art.cdragon}
+            emoji={def.art.emoji}
+            className="w-3/4 -translate-y-6 rounded-full border-2 border-gold/50 shadow-[0_0_40px_-6px_rgba(0,0,0,0.9)]"
+            emojiClassName="-translate-y-6 text-7xl"
+          />
+        </div>
+      )}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-1.5 rounded-lg border border-gold-bright/20" />
+      <div className="absolute inset-x-0 bottom-0 bg-[linear-gradient(180deg,transparent,rgba(1,10,19,0.85)_35%,rgba(1,10,19,0.98))] px-3 pb-3 pt-10 text-center">
+        <p className="title truncate text-base font-bold leading-tight sm:text-lg">{def.name}</p>
+        {subtitle && <div className="mt-0.5 truncate text-[11px] text-muted sm:text-xs">{subtitle}</div>}
+      </div>
+      {children}
+    </div>
   );
 }
 

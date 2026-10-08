@@ -10,7 +10,7 @@ export const JUNGLE: FighterDef[] = [
     name: "Carapateur",
     title: "Crabe de la rivière",
     archetype: "monster",
-    art: { kind: "monster", emoji: "🦀", color: "#4fa3c7" },
+    art: { kind: "monster", emoji: "🦀", color: "#4fa3c7", cdragon: "sru_crab" },
     stats: monsterStats({ hp: 2350, ad: 95, armor: 90, mr: 90 }),
     passive: { kind: "startShield", name: "Carapace", description: "Un bouclier de 10 % des PV max, rechargé tous les 3 rounds.", pctMaxHp: 0.1, every: 3 },
     spells: [
@@ -24,7 +24,7 @@ export const JUNGLE: FighterDef[] = [
     name: "Gromp",
     title: "Crapaud géant",
     archetype: "monster",
-    art: { kind: "monster", emoji: "🐸", color: "#7a9e3a" },
+    art: { kind: "monster", emoji: "🐸", color: "#7a9e3a", cdragon: "sru_gromp" },
     stats: monsterStats({ hp: 4300, ad: 186, armor: 60, mr: 60 }),
     passive: { kind: "none", name: "Peau visqueuse", description: "Aucun effet particulier." },
     spells: [
@@ -38,7 +38,7 @@ export const JUNGLE: FighterDef[] = [
     name: "Krugs anciens",
     title: "Colosses de pierre",
     archetype: "monster",
-    art: { kind: "monster", emoji: "🪨", color: "#9a7b5a" },
+    art: { kind: "monster", emoji: "🪨", color: "#9a7b5a", cdragon: "sru_krug" },
     stats: monsterStats({ hp: 5050, ad: 209, armor: 150, mr: 50 }),
     passive: { kind: "none", name: "Fragmentation", description: "Aucun effet particulier." },
     spells: [
@@ -53,7 +53,7 @@ export const JUNGLE: FighterDef[] = [
     name: "Corbins",
     title: "Nuée affamée",
     archetype: "monster",
-    art: { kind: "monster", emoji: "🐦‍⬛", color: "#b05a7a" },
+    art: { kind: "monster", emoji: "🐦‍⬛", color: "#b05a7a", cdragon: "sru_razorbeak" },
     stats: monsterStats({ hp: 3750, ad: 194, armor: 55, mr: 55, attackSpeed: 0.35, crit: 0.2 }),
     passive: { kind: "none", name: "Nuée", description: "Attaque souvent deux fois." },
     spells: [
@@ -67,7 +67,7 @@ export const JUNGLE: FighterDef[] = [
     name: "Loups des ténèbres",
     title: "Meute affamée",
     archetype: "monster",
-    art: { kind: "monster", emoji: "🐺", color: "#6c6f8f" },
+    art: { kind: "monster", emoji: "🐺", color: "#6c6f8f", cdragon: "sru_murkwolf" },
     stats: monsterStats({ hp: 4200, ad: 217, armor: 70, mr: 50, attackSpeed: 0.2 }),
     passive: { kind: "bleedOnHit", name: "Crocs", description: "Les morsures font saigner.", amount: { base: 35 }, turns: 3 },
     spells: [
@@ -81,7 +81,7 @@ export const JUNGLE: FighterDef[] = [
     name: "Sentinelle bleue",
     title: "Gardien arcanique",
     archetype: "monster",
-    art: { kind: "monster", emoji: "🔵", color: "#3b7bd9" },
+    art: { kind: "monster", emoji: "🔵", color: "#3b7bd9", cdragon: "sru_blue" },
     stats: monsterStats({ hp: 4350, ad: 150, armor: 80, mr: 110 }),
     passive: { kind: "regen", name: "Crête de perspicacité", description: "Régénère 0,8 % des PV max par tour.", pct: 0.008 },
     spells: [
@@ -96,7 +96,7 @@ export const JUNGLE: FighterDef[] = [
     name: "Brambleback rouge",
     title: "Bête ardente",
     archetype: "monster",
-    art: { kind: "monster", emoji: "🔴", color: "#d9503b" },
+    art: { kind: "monster", emoji: "🔴", color: "#d9503b", cdragon: "sru_red" },
     stats: monsterStats({ hp: 4600, ad: 221, armor: 95, mr: 70 }),
     passive: { kind: "bleedOnHit", name: "Brûlure", description: "Les coups brûlent la cible.", amount: { base: 40 }, turns: 2 },
     spells: [
@@ -114,7 +114,7 @@ export const DRAGONS: FighterDef[] = [
     name: "Dragon infernal",
     title: "Drake de feu",
     archetype: "dragon",
-    art: { kind: "monster", emoji: "🔥", color: "#e3572b" },
+    art: { kind: "monster", emoji: "🔥", color: "#e3572b", cdragon: "sru_dragon_fire" },
     stats: monsterStats({ hp: 6600, ad: 299, armor: 90, mr: 80 }),
     passive: { kind: "bleedOnHit", name: "Braises", description: "Les attaques brûlent la cible.", amount: { base: 55 }, turns: 2 },
     spells: [
@@ -129,7 +129,7 @@ export const DRAGONS: FighterDef[] = [
     name: "Dragon des montagnes",
     title: "Drake de pierre",
     archetype: "dragon",
-    art: { kind: "monster", emoji: "⛰️", color: "#a3845d" },
+    art: { kind: "monster", emoji: "⛰️", color: "#a3845d", cdragon: "sru_dragon_earth" },
     stats: monsterStats({ hp: 6800, ad: 231, armor: 110, mr: 90 }),
     passive: { kind: "startShield", name: "Écailles de roche", description: "Un bouclier de 6 % des PV max, rechargé tous les 4 rounds.", pctMaxHp: 0.06, every: 4 },
     spells: [
@@ -144,7 +144,7 @@ export const DRAGONS: FighterDef[] = [
     name: "Dragon de l'océan",
     title: "Drake des eaux",
     archetype: "dragon",
-    art: { kind: "monster", emoji: "🌊", color: "#2f8fc4" },
+    art: { kind: "monster", emoji: "🌊", color: "#2f8fc4", cdragon: "sru_dragon_water" },
     stats: monsterStats({ hp: 7100, ad: 276, armor: 100, mr: 100 }),
     passive: { kind: "regen", name: "Marée montante", description: "Régénère 1 % des PV max par tour.", pct: 0.01 },
     spells: [
@@ -159,7 +159,7 @@ export const DRAGONS: FighterDef[] = [
     name: "Dragon des nuages",
     title: "Drake du vent",
     archetype: "dragon",
-    art: { kind: "monster", emoji: "🌪️", color: "#9fc3d6" },
+    art: { kind: "monster", emoji: "🌪️", color: "#9fc3d6", cdragon: "sru_dragon_air" },
     stats: monsterStats({ hp: 6350, ad: 284, armor: 90, mr: 90, attackSpeed: 0.4 }),
     passive: { kind: "none", name: "Vents porteurs", description: "Attaque très souvent deux fois." },
     spells: [
@@ -174,7 +174,7 @@ export const DRAGONS: FighterDef[] = [
     name: "Dragon hextech",
     title: "Drake mécanique",
     archetype: "dragon",
-    art: { kind: "monster", emoji: "⚡", color: "#3fd0c9" },
+    art: { kind: "monster", emoji: "⚡", color: "#3fd0c9", cdragon: "sru_dragon_hextech" },
     stats: monsterStats({ hp: 6800, ad: 292, armor: 110, mr: 110 }),
     passive: { kind: "stunEveryNSpells", name: "Surcharge", description: "Tous les 3 sorts, la décharge étourdit.", n: 3 },
     spells: [
@@ -189,7 +189,7 @@ export const DRAGONS: FighterDef[] = [
     name: "Dragon chimtech",
     title: "Drake toxique",
     archetype: "dragon",
-    art: { kind: "monster", emoji: "🧪", color: "#93c43b" },
+    art: { kind: "monster", emoji: "🧪", color: "#93c43b", cdragon: "sru_dragon_chemtech" },
     stats: monsterStats({ hp: 7100, ad: 284, armor: 100, mr: 100 }),
     passive: { kind: "lowHpBonus", name: "Ténacité chimique", description: "Sous 35 % de PV, +80 AD.", below: 0.35, stat: "ad", amount: 80 },
     spells: [
@@ -206,7 +206,7 @@ export const BARON: FighterDef = {
   name: "Baron Nashor",
   title: "Fléau du Néant",
   archetype: "baron",
-  art: { kind: "monster", emoji: "🪱", color: "#8b4fd6" },
+  art: { kind: "monster", emoji: "🪱", color: "#8b4fd6", cdragon: "sru_baron" },
   stats: monsterStats({ hp: 16550, ad: 373, armor: 130, mr: 120 }),
   passive: { kind: "everyNthAttack", name: "Présence du Néant", description: "Toutes les 2 attaques, inflige des dégâts bruts.", n: 2, bonus: { base: 225 }, type: "true" },
   spells: [

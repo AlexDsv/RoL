@@ -49,7 +49,8 @@ export function useDdragonVersion(): string {
 export const ddragon = {
   championSquare: (version: string, key: string) => `${CDN}/cdn/${version}/img/champion/${key}.png`,
   splash: (key: string) => `${CDN}/cdn/img/champion/splash/${key}_0.jpg`,
-  loading: (key: string) => `${CDN}/cdn/img/champion/loading/${key}_0.jpg`,
+  /** Portrait d'écran de chargement (308×560) ; `skin` = numéro de skin, 0 pour le skin de base. */
+  loading: (key: string, skin = 0) => `${CDN}/cdn/img/champion/loading/${key}_${skin}.jpg`,
   item: (version: string, id: string) => `${CDN}/cdn/${version}/img/item/${id}.png`,
   spell: (version: string, file: string) => `${CDN}/cdn/${version}/img/spell/${file}`,
   passive: (version: string, file: string) => `${CDN}/cdn/${version}/img/passive/${file}`,
