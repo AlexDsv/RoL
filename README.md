@@ -31,16 +31,26 @@ Les images (portraits, sorts, objets, splash arts) viennent de [Data Dragon](htt
 
 ## Équilibrage
 
-Le moteur est déterministe : une graine donne toujours le même combat. On peut donc simuler des milliers de combats.
+Le moteur est déterministe : une graine donne toujours le même combat. On peut donc simuler des centaines de milliers de combats, répartis sur tous les cœurs.
+
+- Les **adversaires** jouent avec l'IA du jeu (`src/game/ai.ts`).
+- Le **joueur simulé** (`src/game/player-ai.ts`) existe en trois niveaux : débutant, moyen et expert. Il anticipe le tour adverse, suit le build recommandé du champion (`src/game/data/builds.ts`), l'adapte au prochain adversaire et fait parfois des erreurs.
+- Les coefficients d'équilibrage sont générés dans `src/game/data/balance.ts` :
+  - `power` : force d'un champion, pour ~50 % de victoires en duel ;
+  - `runPower` : coefficient appliqué au champion joué en partie, pour ~30 % de victoires pour un joueur moyen ;
+  - `hpScale` et `damageScale` : réglages des monstres (durée des combats, usure, dangerosité du Baron).
 
 ```bash
-npm run balance             # duels 1v1 aux niveaux 1, 9 et 18, puis parties complètes simulées
-npm run balance -- 40 duels # uniquement les duels
-npm run tune                # recalcule le coefficient « power » de chaque champion (~50 % en duel)
-npx tsx scripts/duel.ts ahri zed 9   # journal d'un duel
+npm run calibrate                     # recalcule balance.ts (~10 min)
+npm run calibrate -- --skip-duels     # garde les coefficients de duel
+npm run report                        # rapport de validation (~730 000 combats, ~3 min) → reports/balance.json
+npm run report -- --quick             # version rapide
+npm run report -- --check             # échoue si un champion sort des fourchettes
+npx tsx scripts/report-html.ts        # page de graphiques → reports/balance.html
+npx tsx scripts/duel.ts ahri zed 9    # journal d'un duel
 ```
 
-Après une modification de sort ou de stats, relance `npm run tune`, reporte les coefficients dans `src/game/data/champions.ts`, puis vérifie les parties complètes avec `npm run balance`.
+Le calibrage utilise un lot de graines, le rapport un autre lot jamais utilisé, pour ne pas mesurer un équilibrage taillé sur mesure. Après une modification de sort, de stats ou d'objet : `npm run calibrate`, puis `npm run report`.
 
 ## Mentions
 

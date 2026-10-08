@@ -1,17 +1,17 @@
 {
- "generatedAt": "2026-10-08T15:00:15.909Z",
- "commit": "355f92e",
- "quick": true,
+ "generatedAt": "2026-10-08T15:23:54.408Z",
+ "commit": "643d3d5",
+ "quick": false,
  "target": 0.3,
- "fights": 125009,
- "minutes": 0.7,
+ "fights": 728030,
+ "minutes": 3,
  "champions": [
   {
    "id": "garen",
    "name": "Garen",
    "archetype": "fighter",
    "power": 0.93,
-   "pve": 0.94,
+   "runPower": 0.992,
    "difficulty": 2
   },
   {
@@ -19,15 +19,15 @@
    "name": "Darius",
    "archetype": "fighter",
    "power": 0.86,
-   "pve": 0.99,
-   "difficulty": 2
+   "runPower": 0.98,
+   "difficulty": 3
   },
   {
    "id": "yasuo",
    "name": "Yasuo",
    "archetype": "fighter",
    "power": 1.03,
-   "pve": 1,
+   "runPower": 0.968,
    "difficulty": 1
   },
   {
@@ -35,7 +35,7 @@
    "name": "Malphite",
    "archetype": "tank",
    "power": 1.06,
-   "pve": 1.06,
+   "runPower": 0.968,
    "difficulty": 1
   },
   {
@@ -43,23 +43,23 @@
    "name": "Leona",
    "archetype": "tank",
    "power": 1.41,
-   "pve": 1.06,
-   "difficulty": 2
+   "runPower": 1.043,
+   "difficulty": 1
   },
   {
    "id": "zed",
    "name": "Zed",
    "archetype": "assassin",
    "power": 0.98,
-   "pve": 1.1,
-   "difficulty": 1
+   "runPower": 0.92,
+   "difficulty": 2
   },
   {
    "id": "katarina",
    "name": "Katarina",
    "archetype": "assassin",
    "power": 1.18,
-   "pve": 1.56,
+   "runPower": 1.139,
    "difficulty": 1
   },
   {
@@ -67,7 +67,7 @@
    "name": "Ahri",
    "archetype": "mage",
    "power": 0.95,
-   "pve": 1.07,
+   "runPower": 0.992,
    "difficulty": 3
   },
   {
@@ -75,7 +75,7 @@
    "name": "Lux",
    "archetype": "mage",
    "power": 1.19,
-   "pve": 1.28,
+   "runPower": 1.03,
    "difficulty": 3
   },
   {
@@ -83,15 +83,15 @@
    "name": "Annie",
    "archetype": "mage",
    "power": 1.22,
-   "pve": 1.18,
-   "difficulty": 3
+   "runPower": 1.017,
+   "difficulty": 2
   },
   {
    "id": "jinx",
    "name": "Jinx",
    "archetype": "marksman",
    "power": 1.04,
-   "pve": 1.01,
+   "runPower": 0.98,
    "difficulty": 2
   },
   {
@@ -99,15 +99,15 @@
    "name": "Ashe",
    "archetype": "marksman",
    "power": 1.37,
-   "pve": 1.05,
-   "difficulty": 2
+   "runPower": 0.932,
+   "difficulty": 3
   },
   {
    "id": "caitlyn",
    "name": "Caitlyn",
    "archetype": "marksman",
    "power": 1.14,
-   "pve": 1,
+   "runPower": 0.968,
    "difficulty": 1
   },
   {
@@ -115,16 +115,88 @@
    "name": "Soraka",
    "archetype": "support",
    "power": 1.2,
-   "pve": 2.33,
-   "difficulty": 3
+   "runPower": 1.043,
+   "difficulty": 2
   },
   {
    "id": "janna",
    "name": "Janna",
    "archetype": "support",
    "power": 1.21,
-   "pve": 2.24,
+   "runPower": 1.03,
    "difficulty": 3
+  }
+ ],
+ "monsters": [
+  {
+   "id": "scuttler",
+   "hpScale": 0.505,
+   "damageScale": 2.038
+  },
+  {
+   "id": "gromp",
+   "hpScale": 0.644,
+   "damageScale": 1.026
+  },
+  {
+   "id": "krugs",
+   "hpScale": 0.533,
+   "damageScale": 1.027
+  },
+  {
+   "id": "raptors",
+   "hpScale": 0.825,
+   "damageScale": 1.091
+  },
+  {
+   "id": "wolves",
+   "hpScale": 0.64,
+   "damageScale": 1.233
+  },
+  {
+   "id": "blue",
+   "hpScale": 0.434,
+   "damageScale": 1.468
+  },
+  {
+   "id": "red",
+   "hpScale": 0.615,
+   "damageScale": 1.186
+  },
+  {
+   "id": "dragon-infernal",
+   "hpScale": 0.742,
+   "damageScale": 1.416
+  },
+  {
+   "id": "dragon-mountain",
+   "hpScale": 0.448,
+   "damageScale": 2.087
+  },
+  {
+   "id": "dragon-ocean",
+   "hpScale": 0.485,
+   "damageScale": 1.585
+  },
+  {
+   "id": "dragon-cloud",
+   "hpScale": 0.515,
+   "damageScale": 1.45
+  },
+  {
+   "id": "dragon-hextech",
+   "hpScale": 0.59,
+   "damageScale": 1.412
+  },
+  {
+   "id": "dragon-chemtech",
+   "hpScale": 0.506,
+   "damageScale": 1.465
+  },
+  {
+   "id": "baron",
+   "hpScale": 0.521,
+   "damageScale": 1.111
   }
  ],
  "duels": {
@@ -137,500 +209,500 @@
   "perChampion": [
    {
     "id": "garen",
-    "winRate": 0.464,
+    "winRate": 0.478,
     "ci": [
-     0.427,
-     0.502
+     0.457,
+     0.499
     ],
     "byLevel": [
-     0.571,
-     0.405,
-     0.464,
-     0.417
+     0.566,
+     0.42,
+     0.505,
+     0.421
     ]
    },
    {
     "id": "darius",
-    "winRate": 0.488,
+    "winRate": 0.483,
     "ci": [
-     0.45,
-     0.526
+     0.462,
+     0.504
     ],
     "byLevel": [
-     0.387,
-     0.44,
-     0.583,
-     0.542
+     0.35,
+     0.464,
+     0.602,
+     0.516
     ]
    },
    {
     "id": "yasuo",
-    "winRate": 0.518,
+    "winRate": 0.509,
     "ci": [
-     0.48,
-     0.555
+     0.488,
+     0.53
     ],
     "byLevel": [
-     0.607,
-     0.655,
-     0.31,
-     0.5
+     0.632,
+     0.63,
+     0.271,
+     0.502
     ]
    },
    {
     "id": "malphite",
-    "winRate": 0.504,
+    "winRate": 0.499,
     "ci": [
-     0.467,
-     0.542
+     0.478,
+     0.52
     ],
     "byLevel": [
-     0.387,
-     0.613,
-     0.518,
-     0.5
+     0.375,
+     0.623,
+     0.516,
+     0.482
     ]
    },
    {
     "id": "leona",
-    "winRate": 0.507,
+    "winRate": 0.5,
     "ci": [
-     0.47,
-     0.545
+     0.479,
+     0.521
     ],
     "byLevel": [
      0.536,
-     0.625,
-     0.589,
-     0.28
+     0.638,
+     0.582,
+     0.245
     ]
    },
    {
     "id": "zed",
-    "winRate": 0.504,
+    "winRate": 0.519,
     "ci": [
-     0.467,
-     0.542
+     0.498,
+     0.54
     ],
     "byLevel": [
-     0.905,
-     0.577,
-     0.423,
-     0.113
+     0.896,
+     0.602,
+     0.459,
+     0.12
     ]
    },
    {
     "id": "katarina",
-    "winRate": 0.491,
+    "winRate": 0.489,
     "ci": [
-     0.453,
-     0.529
+     0.468,
+     0.51
     ],
     "byLevel": [
-     0.655,
-     0.548,
-     0.571,
-     0.19
+     0.639,
+     0.575,
+     0.588,
+     0.154
     ]
    },
    {
     "id": "ahri",
-    "winRate": 0.519,
+    "winRate": 0.516,
     "ci": [
-     0.482,
-     0.557
+     0.495,
+     0.536
     ],
     "byLevel": [
-     0.351,
-     0.565,
-     0.47,
-     0.69
+     0.332,
+     0.577,
+     0.502,
+     0.652
     ]
    },
    {
     "id": "lux",
-    "winRate": 0.512,
+    "winRate": 0.508,
     "ci": [
-     0.474,
-     0.55
+     0.487,
+     0.528
     ],
     "byLevel": [
-     0.327,
-     0.5,
-     0.5,
-     0.72
+     0.314,
+     0.504,
+     0.534,
+     0.679
     ]
    },
    {
     "id": "annie",
-    "winRate": 0.485,
+    "winRate": 0.49,
     "ci": [
-     0.448,
-     0.523
+     0.47,
+     0.511
     ],
     "byLevel": [
-     0.423,
-     0.482,
-     0.44,
-     0.595
+     0.42,
+     0.5,
+     0.477,
+     0.564
     ]
    },
    {
     "id": "jinx",
-    "winRate": 0.51,
+    "winRate": 0.497,
     "ci": [
-     0.473,
-     0.548
+     0.477,
+     0.518
     ],
     "byLevel": [
-     0.536,
-     0.554,
-     0.232,
-     0.72
+     0.575,
+     0.479,
+     0.196,
+     0.739
     ]
    },
    {
     "id": "ashe",
-    "winRate": 0.501,
+    "winRate": 0.512,
     "ci": [
-     0.464,
-     0.539
+     0.491,
+     0.533
     ],
     "byLevel": [
-     0.494,
-     0.423,
-     0.387,
-     0.702
+     0.561,
+     0.404,
+     0.314,
+     0.77
     ]
    },
    {
     "id": "caitlyn",
-    "winRate": 0.521,
+    "winRate": 0.52,
     "ci": [
-     0.483,
-     0.558
+     0.499,
+     0.54
     ],
     "byLevel": [
-     0.738,
-     0.56,
-     0.25,
-     0.536
+     0.727,
+     0.518,
+     0.207,
+     0.627
     ]
    },
    {
     "id": "soraka",
-    "winRate": 0.488,
+    "winRate": 0.496,
     "ci": [
-     0.45,
-     0.526
+     0.475,
+     0.517
     ],
     "byLevel": [
-     0.363,
-     0.262,
-     0.881,
-     0.446
+     0.348,
+     0.254,
+     0.877,
+     0.505
     ]
    },
    {
     "id": "janna",
-    "winRate": 0.485,
+    "winRate": 0.484,
     "ci": [
-     0.448,
-     0.523
+     0.464,
+     0.505
     ],
     "byLevel": [
-     0.22,
-     0.292,
-     0.881,
-     0.548
+     0.229,
+     0.314,
+     0.87,
+     0.525
     ]
    }
   ],
   "matrix": [
    [
     null,
-    0.167,
-    0.271,
-    0.625,
-    0.667,
-    0.625,
-    0.938,
-    0.375,
-    0.458,
-    0.542,
-    0.5,
-    0.438,
-    0.521,
-    0.125,
-    0.25
+    0.169,
+    0.281,
+    0.6,
+    0.663,
+    0.656,
+    0.956,
+    0.419,
+    0.469,
+    0.581,
+    0.525,
+    0.513,
+    0.506,
+    0.094,
+    0.263
    ],
    [
-    0.833,
+    0.831,
     null,
-    0.333,
-    0.375,
-    0.396,
-    0.625,
-    0.896,
-    0.458,
-    0.5,
-    0.583,
-    0.521,
+    0.338,
+    0.369,
+    0.388,
+    0.6,
+    0.831,
+    0.456,
+    0.525,
+    0.563,
+    0.538,
     0.688,
-    0.458,
-    0.021,
-    0.146
+    0.519,
+    0.025,
+    0.094
    ],
    [
-    0.729,
-    0.667,
+    0.719,
+    0.663,
     null,
-    0.229,
-    0.271,
-    0.5,
-    0.813,
-    0.563,
-    0.5,
-    0.563,
-    0.438,
-    0.375,
-    0.542,
-    0.5,
-    0.563
+    0.231,
+    0.275,
+    0.431,
+    0.794,
+    0.544,
+    0.475,
+    0.55,
+    0.488,
+    0.381,
+    0.556,
+    0.481,
+    0.538
    ],
    [
-    0.375,
-    0.625,
-    0.771,
+    0.4,
+    0.631,
+    0.769,
     null,
-    0.479,
-    0.771,
+    0.463,
+    0.788,
     0.125,
-    0.292,
-    0.333,
+    0.313,
+    0.35,
     0.125,
-    0.854,
-    0.917,
-    0.625,
+    0.85,
+    0.838,
+    0.569,
     0.25,
-    0.521
+    0.519
    ],
    [
-    0.333,
-    0.604,
-    0.729,
-    0.521,
+    0.338,
+    0.613,
+    0.725,
+    0.538,
     null,
     0.625,
     0.25,
     0.25,
     0.375,
-    0.479,
-    0.604,
-    0.771,
-    0.708,
-    0.479,
+    0.456,
+    0.588,
+    0.688,
+    0.694,
+    0.488,
     0.375
    ],
    [
-    0.375,
-    0.375,
-    0.5,
-    0.229,
+    0.344,
+    0.4,
+    0.569,
+    0.213,
     0.375,
     null,
-    0.896,
+    0.881,
     0.5,
     0.75,
-    0.75,
-    0.458,
-    0.458,
-    0.438,
-    0.458,
+    0.744,
+    0.519,
+    0.481,
+    0.519,
+    0.475,
     0.5
    ],
    [
-    0.063,
-    0.104,
-    0.188,
+    0.044,
+    0.169,
+    0.206,
     0.875,
     0.75,
-    0.104,
+    0.119,
     null,
-    0.604,
+    0.581,
     0.75,
     0.625,
-    0.625,
-    0.646,
-    0.396,
-    0.667,
-    0.479
+    0.613,
+    0.594,
+    0.406,
+    0.594,
+    0.519
    ],
    [
-    0.625,
-    0.542,
-    0.438,
-    0.708,
+    0.581,
+    0.544,
+    0.456,
+    0.688,
     0.75,
     0.5,
-    0.396,
+    0.419,
     null,
     0.5,
     0.813,
-    0.396,
-    0.354,
-    0.5,
-    0.5,
-    0.25
+    0.4,
+    0.35,
+    0.463,
+    0.469,
+    0.288
    ],
    [
-    0.542,
-    0.5,
-    0.5,
-    0.667,
+    0.531,
+    0.475,
+    0.525,
+    0.65,
     0.625,
     0.25,
     0.25,
     0.5,
     null,
-    0.5,
-    0.354,
+    0.494,
+    0.388,
+    0.413,
     0.438,
-    0.5,
-    0.771,
-    0.771
+    0.794,
+    0.775
    ],
    [
-    0.458,
-    0.417,
+    0.419,
     0.438,
+    0.45,
     0.875,
-    0.521,
-    0.25,
+    0.544,
+    0.256,
     0.375,
     0.188,
-    0.5,
+    0.506,
     null,
-    0.354,
+    0.363,
+    0.338,
     0.313,
-    0.333,
-    0.896,
+    0.925,
     0.875
    ],
    [
-    0.5,
-    0.479,
-    0.563,
-    0.146,
-    0.396,
-    0.542,
-    0.375,
-    0.604,
-    0.646,
-    0.646,
+    0.475,
+    0.463,
+    0.513,
+    0.15,
+    0.413,
+    0.481,
+    0.388,
+    0.6,
+    0.613,
+    0.638,
     null,
-    0.563,
-    0.354,
-    0.688,
-    0.646
+    0.525,
+    0.431,
+    0.656,
+    0.619
    ],
    [
-    0.563,
+    0.488,
     0.313,
-    0.625,
-    0.083,
-    0.229,
-    0.542,
-    0.354,
-    0.646,
-    0.563,
-    0.688,
-    0.438,
+    0.619,
+    0.163,
+    0.313,
+    0.519,
+    0.406,
+    0.65,
+    0.588,
+    0.663,
+    0.475,
     null,
-    0.479,
-    0.75,
-    0.75
-   ],
-   [
-    0.479,
-    0.542,
-    0.458,
-    0.375,
-    0.292,
-    0.563,
-    0.604,
-    0.5,
-    0.5,
-    0.667,
-    0.646,
-    0.521,
-    null,
-    0.542,
-    0.604
-   ],
-   [
-    0.875,
-    0.979,
     0.5,
     0.75,
-    0.521,
-    0.542,
-    0.333,
+    0.725
+   ],
+   [
+    0.494,
+    0.481,
+    0.444,
+    0.431,
+    0.306,
+    0.481,
+    0.594,
+    0.538,
+    0.563,
+    0.688,
+    0.569,
     0.5,
-    0.229,
-    0.104,
-    0.313,
+    null,
+    0.575,
+    0.613
+   ],
+   [
+    0.906,
+    0.975,
+    0.519,
+    0.75,
+    0.513,
+    0.525,
+    0.406,
+    0.531,
+    0.206,
+    0.075,
+    0.344,
     0.25,
-    0.458,
+    0.425,
     null,
-    0.479
+    0.519
    ],
    [
-    0.75,
-    0.854,
-    0.438,
-    0.479,
+    0.738,
+    0.906,
+    0.463,
+    0.481,
     0.625,
     0.5,
-    0.521,
-    0.75,
-    0.229,
+    0.481,
+    0.713,
+    0.225,
     0.125,
-    0.354,
-    0.25,
-    0.396,
-    0.521,
+    0.381,
+    0.275,
+    0.388,
+    0.481,
     null
    ]
   ],
   "rounds": [
-   9.208,
-   7.968,
-   8.974,
-   10.364
+   9.131,
+   7.99,
+   8.973,
+   10.293
   ],
-  "total": 5040
+  "total": 16800
  },
  "runs": {
   "beginner": {
-   "runs": 1500,
-   "winRate": 0.036,
+   "runs": 7500,
+   "winRate": 0.018,
    "ci": [
-    0.028,
-    0.047
+    0.015,
+    0.021
    ],
    "perChampion": [
     {
      "id": "garen",
-     "runs": 100,
-     "winRate": 0.07,
+     "runs": 500,
+     "winRate": 0.044,
      "ci": [
-      0.034,
-      0.137
+      0.029,
+      0.066
      ],
-     "avgStage": 5.98,
+     "avgStage": 5.47,
      "deaths": {
-      "champions": 0.93,
+      "champions": 0.956,
       "jungle": 0,
       "dragons": 0,
       "baron": 0
@@ -638,723 +710,723 @@
     },
     {
      "id": "darius",
-     "runs": 100,
-     "winRate": 0.03,
+     "runs": 500,
+     "winRate": 0.006,
      "ci": [
-      0.01,
-      0.085
+      0.002,
+      0.017
      ],
-     "avgStage": 5.05,
+     "avgStage": 3.622,
      "deaths": {
-      "champions": 0.95,
+      "champions": 0.992,
       "jungle": 0,
-      "dragons": 0.02,
+      "dragons": 0.002,
       "baron": 0
      }
     },
     {
      "id": "yasuo",
-     "runs": 100,
-     "winRate": 0.07,
+     "runs": 500,
+     "winRate": 0.042,
      "ci": [
-      0.034,
-      0.137
+      0.028,
+      0.063
      ],
-     "avgStage": 8.74,
+     "avgStage": 6.952,
      "deaths": {
-      "champions": 0.9,
+      "champions": 0.94,
       "jungle": 0,
-      "dragons": 0,
-      "baron": 0.03
+      "dragons": 0.008,
+      "baron": 0.01
      }
     },
     {
      "id": "malphite",
-     "runs": 100,
-     "winRate": 0.03,
+     "runs": 500,
+     "winRate": 0.014,
      "ci": [
-      0.01,
-      0.085
+      0.007,
+      0.029
      ],
-     "avgStage": 8.23,
+     "avgStage": 5.736,
      "deaths": {
-      "champions": 0.9,
+      "champions": 0.954,
       "jungle": 0,
-      "dragons": 0.01,
-      "baron": 0.06
+      "dragons": 0.014,
+      "baron": 0.018
      }
     },
     {
      "id": "leona",
-     "runs": 100,
-     "winRate": 0,
+     "runs": 500,
+     "winRate": 0.032,
      "ci": [
-      0,
-      0.037
+      0.02,
+      0.051
      ],
-     "avgStage": 8.99,
+     "avgStage": 14.378,
      "deaths": {
-      "champions": 0.89,
+      "champions": 0.608,
       "jungle": 0,
-      "dragons": 0.06,
-      "baron": 0.05
+      "dragons": 0.178,
+      "baron": 0.182
      }
     },
     {
      "id": "zed",
-     "runs": 100,
-     "winRate": 0.11,
+     "runs": 500,
+     "winRate": 0.004,
      "ci": [
-      0.063,
-      0.186
+      0.001,
+      0.014
      ],
-     "avgStage": 11.02,
+     "avgStage": 5.656,
      "deaths": {
-      "champions": 0.78,
+      "champions": 0.952,
       "jungle": 0,
-      "dragons": 0.07,
-      "baron": 0.04
+      "dragons": 0.04,
+      "baron": 0.004
      }
     },
     {
      "id": "katarina",
-     "runs": 100,
-     "winRate": 0.06,
+     "runs": 500,
+     "winRate": 0.008,
      "ci": [
-      0.028,
-      0.125
+      0.003,
+      0.02
      ],
-     "avgStage": 10.71,
+     "avgStage": 18.882,
      "deaths": {
-      "champions": 0.78,
+      "champions": 0.26,
       "jungle": 0,
-      "dragons": 0,
-      "baron": 0.16
+      "dragons": 0.57,
+      "baron": 0.162
      }
     },
     {
      "id": "ahri",
-     "runs": 100,
-     "winRate": 0,
+     "runs": 500,
+     "winRate": 0.008,
      "ci": [
-      0,
-      0.037
+      0.003,
+      0.02
      ],
-     "avgStage": 2.88,
+     "avgStage": 3.042,
      "deaths": {
-      "champions": 0.99,
+      "champions": 0.974,
       "jungle": 0,
-      "dragons": 0,
-      "baron": 0.01
+      "dragons": 0.01,
+      "baron": 0.008
      }
     },
     {
      "id": "lux",
-     "runs": 100,
+     "runs": 500,
      "winRate": 0,
      "ci": [
       0,
-      0.037
+      0.008
      ],
-     "avgStage": 2.33,
+     "avgStage": 3.664,
      "deaths": {
-      "champions": 1,
+      "champions": 0.956,
       "jungle": 0,
-      "dragons": 0,
-      "baron": 0
+      "dragons": 0.03,
+      "baron": 0.014
      }
     },
     {
      "id": "annie",
-     "runs": 100,
-     "winRate": 0,
+     "runs": 500,
+     "winRate": 0.002,
      "ci": [
       0,
-      0.037
+      0.011
      ],
-     "avgStage": 4.69,
+     "avgStage": 4.008,
      "deaths": {
-      "champions": 0.92,
+      "champions": 0.942,
       "jungle": 0,
-      "dragons": 0.02,
-      "baron": 0.06
+      "dragons": 0.042,
+      "baron": 0.014
      }
     },
     {
      "id": "jinx",
-     "runs": 100,
-     "winRate": 0.03,
+     "runs": 500,
+     "winRate": 0.008,
      "ci": [
-      0.01,
-      0.085
+      0.003,
+      0.02
      ],
-     "avgStage": 6.2,
+     "avgStage": 5.796,
      "deaths": {
-      "champions": 0.97,
+      "champions": 0.96,
+      "jungle": 0,
+      "dragons": 0.02,
+      "baron": 0.012
+     }
+    },
+    {
+     "id": "ashe",
+     "runs": 500,
+     "winRate": 0.002,
+     "ci": [
+      0,
+      0.011
+     ],
+     "avgStage": 2.814,
+     "deaths": {
+      "champions": 0.998,
       "jungle": 0,
       "dragons": 0,
       "baron": 0
      }
     },
     {
-     "id": "ashe",
-     "runs": 100,
-     "winRate": 0.06,
-     "ci": [
-      0.028,
-      0.125
-     ],
-     "avgStage": 6.7,
-     "deaths": {
-      "champions": 0.91,
-      "jungle": 0,
-      "dragons": 0.02,
-      "baron": 0.01
-     }
-    },
-    {
      "id": "caitlyn",
-     "runs": 100,
-     "winRate": 0.05,
+     "runs": 500,
+     "winRate": 0.026,
      "ci": [
-      0.022,
-      0.112
+      0.015,
+      0.044
      ],
-     "avgStage": 9.12,
+     "avgStage": 6.984,
      "deaths": {
-      "champions": 0.9,
-      "jungle": 0.01,
-      "dragons": 0.01,
-      "baron": 0.03
+      "champions": 0.94,
+      "jungle": 0,
+      "dragons": 0.022,
+      "baron": 0.012
      }
     },
     {
      "id": "soraka",
-     "runs": 100,
-     "winRate": 0.02,
+     "runs": 500,
+     "winRate": 0.034,
      "ci": [
-      0.006,
-      0.07
+      0.021,
+      0.054
      ],
-     "avgStage": 1.42,
+     "avgStage": 3.022,
      "deaths": {
-      "champions": 0.98,
+      "champions": 0.964,
       "jungle": 0,
-      "dragons": 0,
+      "dragons": 0.002,
       "baron": 0
      }
     },
     {
      "id": "janna",
-     "runs": 100,
-     "winRate": 0.01,
+     "runs": 500,
+     "winRate": 0.042,
      "ci": [
-      0.002,
-      0.054
+      0.028,
+      0.063
      ],
-     "avgStage": 1.78,
+     "avgStage": 3.03,
      "deaths": {
-      "champions": 0.99,
+      "champions": 0.956,
       "jungle": 0,
-      "dragons": 0,
+      "dragons": 0.002,
       "baron": 0
      }
     }
    ]
   },
   "average": {
-   "runs": 4500,
-   "winRate": 0.356,
+   "runs": 30000,
+   "winRate": 0.298,
    "ci": [
-    0.342,
-    0.37
+    0.293,
+    0.303
    ],
    "perChampion": [
     {
      "id": "garen",
-     "runs": 300,
-     "winRate": 0.27,
+     "runs": 2000,
+     "winRate": 0.297,
      "ci": [
-      0.223,
-      0.323
+      0.277,
+      0.317
      ],
-     "avgStage": 13.463,
+     "avgStage": 12.684,
      "deaths": {
-      "champions": 0.677,
+      "champions": 0.7,
       "jungle": 0,
-      "dragons": 0.04,
-      "baron": 0.013
+      "dragons": 0.004,
+      "baron": 0
      }
     },
     {
      "id": "darius",
-     "runs": 300,
+     "runs": 2000,
      "winRate": 0.317,
      "ci": [
-      0.267,
-      0.371
+      0.297,
+      0.338
      ],
-     "avgStage": 14.897,
+     "avgStage": 12.949,
      "deaths": {
-      "champions": 0.58,
-      "jungle": 0.003,
-      "dragons": 0.03,
-      "baron": 0.07
+      "champions": 0.674,
+      "jungle": 0,
+      "dragons": 0.003,
+      "baron": 0.006
      }
     },
     {
      "id": "yasuo",
-     "runs": 300,
-     "winRate": 0.45,
+     "runs": 2000,
+     "winRate": 0.324,
      "ci": [
-      0.395,
-      0.507
+      0.304,
+      0.345
      ],
-     "avgStage": 19.287,
+     "avgStage": 15.664,
      "deaths": {
-      "champions": 0.44,
+      "champions": 0.625,
       "jungle": 0,
-      "dragons": 0.023,
-      "baron": 0.087
+      "dragons": 0.009,
+      "baron": 0.043
      }
     },
     {
      "id": "malphite",
-     "runs": 300,
-     "winRate": 0.54,
+     "runs": 2000,
+     "winRate": 0.322,
      "ci": [
-      0.483,
-      0.596
+      0.302,
+      0.343
      ],
-     "avgStage": 18.667,
+     "avgStage": 13.769,
      "deaths": {
-      "champions": 0.45,
+      "champions": 0.658,
       "jungle": 0,
-      "dragons": 0.007,
-      "baron": 0.003
+      "dragons": 0.016,
+      "baron": 0.005
      }
     },
     {
      "id": "leona",
-     "runs": 300,
-     "winRate": 0.083,
+     "runs": 2000,
+     "winRate": 0.283,
      "ci": [
-      0.057,
-      0.12
+      0.264,
+      0.303
      ],
-     "avgStage": 19.61,
+     "avgStage": 22.922,
      "deaths": {
-      "champions": 0.337,
-      "jungle": 0.013,
-      "dragons": 0.153,
-      "baron": 0.413
+      "champions": 0.217,
+      "jungle": 0,
+      "dragons": 0.04,
+      "baron": 0.461
      }
     },
     {
      "id": "zed",
-     "runs": 300,
-     "winRate": 0.653,
+     "runs": 2000,
+     "winRate": 0.282,
      "ci": [
-      0.598,
-      0.705
+      0.262,
+      0.302
      ],
-     "avgStage": 23.613,
+     "avgStage": 18.148,
      "deaths": {
-      "champions": 0.193,
+      "champions": 0.456,
       "jungle": 0,
-      "dragons": 0.013,
-      "baron": 0.14
+      "dragons": 0.031,
+      "baron": 0.233
      }
     },
     {
      "id": "katarina",
-     "runs": 300,
-     "winRate": 0.697,
+     "runs": 2000,
+     "winRate": 0.232,
      "ci": [
-      0.642,
-      0.746
+      0.214,
+      0.251
      ],
-     "avgStage": 23.08,
+     "avgStage": 26.466,
      "deaths": {
-      "champions": 0.217,
+      "champions": 0.023,
       "jungle": 0,
-      "dragons": 0,
-      "baron": 0.087
+      "dragons": 0.04,
+      "baron": 0.706
      }
     },
     {
      "id": "ahri",
-     "runs": 300,
-     "winRate": 0.303,
+     "runs": 2000,
+     "winRate": 0.277,
      "ci": [
-      0.254,
-      0.358
+      0.258,
+      0.297
      ],
-     "avgStage": 16.063,
+     "avgStage": 14.588,
      "deaths": {
-      "champions": 0.507,
+      "champions": 0.565,
       "jungle": 0,
-      "dragons": 0,
-      "baron": 0.19
+      "dragons": 0.014,
+      "baron": 0.145
      }
     },
     {
      "id": "lux",
-     "runs": 300,
-     "winRate": 0.303,
+     "runs": 2000,
+     "winRate": 0.297,
      "ci": [
-      0.254,
-      0.358
+      0.277,
+      0.317
      ],
-     "avgStage": 14.2,
+     "avgStage": 16.765,
      "deaths": {
-      "champions": 0.6,
+      "champions": 0.465,
       "jungle": 0,
-      "dragons": 0,
-      "baron": 0.097
+      "dragons": 0.026,
+      "baron": 0.213
      }
     },
     {
      "id": "annie",
-     "runs": 300,
-     "winRate": 0.277,
+     "runs": 2000,
+     "winRate": 0.291,
      "ci": [
-      0.229,
-      0.33
+      0.272,
+      0.311
      ],
-     "avgStage": 17.353,
+     "avgStage": 17.622,
      "deaths": {
-      "champions": 0.453,
+      "champions": 0.428,
       "jungle": 0,
-      "dragons": 0.003,
-      "baron": 0.267
+      "dragons": 0.032,
+      "baron": 0.25
      }
     },
     {
      "id": "jinx",
-     "runs": 300,
-     "winRate": 0.257,
+     "runs": 2000,
+     "winRate": 0.307,
      "ci": [
-      0.211,
-      0.309
+      0.287,
+      0.328
      ],
-     "avgStage": 16.77,
+     "avgStage": 15.681,
      "deaths": {
-      "champions": 0.517,
+      "champions": 0.572,
       "jungle": 0,
-      "dragons": 0.02,
-      "baron": 0.207
+      "dragons": 0.014,
+      "baron": 0.108
      }
     },
     {
      "id": "ashe",
-     "runs": 300,
-     "winRate": 0.673,
+     "runs": 2000,
+     "winRate": 0.311,
      "ci": [
-      0.618,
-      0.724
+      0.291,
+      0.332
      ],
-     "avgStage": 23.973,
+     "avgStage": 17.094,
      "deaths": {
-      "champions": 0.18,
+      "champions": 0.489,
       "jungle": 0,
-      "dragons": 0.007,
-      "baron": 0.14
+      "dragons": 0.038,
+      "baron": 0.163
      }
     },
     {
      "id": "caitlyn",
-     "runs": 300,
-     "winRate": 0.2,
+     "runs": 2000,
+     "winRate": 0.31,
      "ci": [
-      0.159,
-      0.249
+      0.29,
+      0.33
      ],
-     "avgStage": 18.053,
+     "avgStage": 16.66,
      "deaths": {
-      "champions": 0.447,
+      "champions": 0.542,
       "jungle": 0,
-      "dragons": 0.037,
-      "baron": 0.317
+      "dragons": 0.026,
+      "baron": 0.123
      }
     },
     {
      "id": "soraka",
-     "runs": 300,
-     "winRate": 0.157,
+     "runs": 2000,
+     "winRate": 0.337,
      "ci": [
-      0.12,
-      0.202
+      0.316,
+      0.358
      ],
-     "avgStage": 6.917,
+     "avgStage": 12.376,
      "deaths": {
-      "champions": 0.843,
+      "champions": 0.642,
       "jungle": 0,
-      "dragons": 0,
-      "baron": 0
+      "dragons": 0.021,
+      "baron": 0.001
      }
     },
     {
      "id": "janna",
-     "runs": 300,
-     "winRate": 0.16,
+     "runs": 2000,
+     "winRate": 0.282,
      "ci": [
-      0.123,
-      0.206
+      0.262,
+      0.302
      ],
-     "avgStage": 7.37,
+     "avgStage": 10.614,
      "deaths": {
-      "champions": 0.84,
-      "jungle": 0,
-      "dragons": 0,
-      "baron": 0
+      "champions": 0.708,
+      "jungle": 0.001,
+      "dragons": 0.008,
+      "baron": 0.002
      }
     }
    ]
   },
   "expert": {
-   "runs": 1500,
-   "winRate": 0.573,
+   "runs": 7500,
+   "winRate": 0.521,
    "ci": [
-    0.547,
-    0.597
+    0.51,
+    0.533
    ],
    "perChampion": [
     {
      "id": "garen",
-     "runs": 100,
-     "winRate": 0.4,
+     "runs": 500,
+     "winRate": 0.404,
      "ci": [
-      0.309,
-      0.498
+      0.362,
+      0.448
      ],
-     "avgStage": 15.93,
+     "avgStage": 14.968,
      "deaths": {
-      "champions": 0.56,
+      "champions": 0.596,
       "jungle": 0,
-      "dragons": 0.02,
-      "baron": 0.02
+      "dragons": 0,
+      "baron": 0
      }
     },
     {
      "id": "darius",
-     "runs": 100,
-     "winRate": 0.54,
+     "runs": 500,
+     "winRate": 0.524,
      "ci": [
-      0.443,
-      0.634
+      0.48,
+      0.567
      ],
-     "avgStage": 19.45,
+     "avgStage": 17.258,
      "deaths": {
-      "champions": 0.37,
+      "champions": 0.472,
       "jungle": 0,
-      "dragons": 0.01,
-      "baron": 0.08
+      "dragons": 0.004,
+      "baron": 0
      }
     },
     {
      "id": "yasuo",
-     "runs": 100,
-     "winRate": 0.54,
+     "runs": 500,
+     "winRate": 0.566,
      "ci": [
-      0.443,
-      0.634
+      0.522,
+      0.609
      ],
-     "avgStage": 21.88,
+     "avgStage": 20.232,
      "deaths": {
-      "champions": 0.32,
+      "champions": 0.408,
       "jungle": 0,
-      "dragons": 0.03,
-      "baron": 0.11
+      "dragons": 0.002,
+      "baron": 0.024
      }
     },
     {
      "id": "malphite",
-     "runs": 100,
-     "winRate": 0.69,
+     "runs": 500,
+     "winRate": 0.48,
      "ci": [
-      0.594,
-      0.772
+      0.437,
+      0.524
      ],
-     "avgStage": 22.13,
+     "avgStage": 17.01,
      "deaths": {
-      "champions": 0.29,
+      "champions": 0.52,
       "jungle": 0,
       "dragons": 0,
-      "baron": 0.02
+      "baron": 0
      }
     },
     {
      "id": "leona",
-     "runs": 100,
-     "winRate": 0.43,
+     "runs": 500,
+     "winRate": 0.528,
      "ci": [
-      0.337,
-      0.528
+      0.484,
+      0.571
      ],
-     "avgStage": 21.99,
+     "avgStage": 24.146,
      "deaths": {
-      "champions": 0.26,
-      "jungle": 0.01,
-      "dragons": 0.08,
-      "baron": 0.22
+      "champions": 0.178,
+      "jungle": 0,
+      "dragons": 0.024,
+      "baron": 0.27
      }
     },
     {
      "id": "zed",
-     "runs": 100,
-     "winRate": 0.87,
+     "runs": 500,
+     "winRate": 0.566,
      "ci": [
-      0.79,
-      0.922
+      0.522,
+      0.609
      ],
-     "avgStage": 25.81,
+     "avgStage": 20.602,
      "deaths": {
-      "champions": 0.09,
+      "champions": 0.354,
       "jungle": 0,
-      "dragons": 0,
-      "baron": 0.04
+      "dragons": 0.026,
+      "baron": 0.054
      }
     },
     {
      "id": "katarina",
-     "runs": 100,
-     "winRate": 0.87,
+     "runs": 500,
+     "winRate": 0.456,
      "ci": [
-      0.79,
-      0.922
+      0.413,
+      0.5
      ],
-     "avgStage": 25.46,
+     "avgStage": 27.406,
      "deaths": {
-      "champions": 0.13,
+      "champions": 0,
       "jungle": 0,
-      "dragons": 0,
-      "baron": 0
+      "dragons": 0.01,
+      "baron": 0.534
      }
     },
     {
      "id": "ahri",
-     "runs": 100,
-     "winRate": 0.54,
+     "runs": 500,
+     "winRate": 0.64,
      "ci": [
-      0.443,
-      0.634
+      0.597,
+      0.681
      ],
-     "avgStage": 20.17,
+     "avgStage": 20.412,
      "deaths": {
-      "champions": 0.32,
+      "champions": 0.308,
       "jungle": 0,
-      "dragons": 0.01,
-      "baron": 0.13
+      "dragons": 0.016,
+      "baron": 0.036
      }
     },
     {
      "id": "lux",
-     "runs": 100,
-     "winRate": 0.53,
+     "runs": 500,
+     "winRate": 0.598,
      "ci": [
-      0.433,
-      0.625
+      0.554,
+      0.64
      ],
-     "avgStage": 17.03,
+     "avgStage": 19.862,
      "deaths": {
-      "champions": 0.46,
+      "champions": 0.344,
       "jungle": 0,
-      "dragons": 0,
-      "baron": 0.01
+      "dragons": 0.016,
+      "baron": 0.042
      }
     },
     {
      "id": "annie",
-     "runs": 100,
-     "winRate": 0.59,
+     "runs": 500,
+     "winRate": 0.58,
      "ci": [
-      0.492,
-      0.681
+      0.536,
+      0.622
      ],
-     "avgStage": 19.84,
+     "avgStage": 21.602,
      "deaths": {
-      "champions": 0.33,
+      "champions": 0.254,
       "jungle": 0,
-      "dragons": 0,
-      "baron": 0.08
+      "dragons": 0.014,
+      "baron": 0.152
      }
     },
     {
      "id": "jinx",
-     "runs": 100,
-     "winRate": 0.62,
+     "runs": 500,
+     "winRate": 0.532,
      "ci": [
-      0.522,
-      0.709
+      0.488,
+      0.575
      ],
-     "avgStage": 21.1,
+     "avgStage": 18.616,
      "deaths": {
-      "champions": 0.32,
+      "champions": 0.442,
       "jungle": 0,
-      "dragons": 0,
-      "baron": 0.06
+      "dragons": 0.008,
+      "baron": 0.018
      }
     },
     {
      "id": "ashe",
-     "runs": 100,
-     "winRate": 0.91,
+     "runs": 500,
+     "winRate": 0.644,
      "ci": [
-      0.838,
-      0.952
+      0.601,
+      0.685
      ],
-     "avgStage": 26.04,
+     "avgStage": 22.29,
      "deaths": {
-      "champions": 0.09,
+      "champions": 0.256,
       "jungle": 0,
-      "dragons": 0,
-      "baron": 0
+      "dragons": 0.048,
+      "baron": 0.052
      }
     },
     {
      "id": "caitlyn",
-     "runs": 100,
-     "winRate": 0.53,
+     "runs": 500,
+     "winRate": 0.586,
      "ci": [
-      0.433,
-      0.625
+      0.542,
+      0.628
      ],
-     "avgStage": 20.48,
+     "avgStage": 20.622,
      "deaths": {
-      "champions": 0.35,
+      "champions": 0.366,
       "jungle": 0,
-      "dragons": 0.02,
-      "baron": 0.1
+      "dragons": 0.014,
+      "baron": 0.034
      }
     },
     {
      "id": "soraka",
-     "runs": 100,
-     "winRate": 0.3,
+     "runs": 500,
+     "winRate": 0.394,
      "ci": [
-      0.219,
-      0.396
+      0.352,
+      0.437
      ],
-     "avgStage": 9.96,
+     "avgStage": 12.912,
      "deaths": {
-      "champions": 0.7,
+      "champions": 0.596,
       "jungle": 0,
-      "dragons": 0,
+      "dragons": 0.01,
       "baron": 0
      }
     },
     {
      "id": "janna",
-     "runs": 100,
-     "winRate": 0.23,
+     "runs": 500,
+     "winRate": 0.324,
      "ci": [
-      0.158,
-      0.322
+      0.284,
+      0.366
      ],
-     "avgStage": 8.78,
+     "avgStage": 11.436,
      "deaths": {
-      "champions": 0.77,
+      "champions": 0.676,
       "jungle": 0,
       "dragons": 0,
       "baron": 0
@@ -1368,291 +1440,291 @@
    "id": "annie",
    "name": "Annie",
    "chapter": "champions",
-   "fights": 3237,
-   "lossRate": 0.061,
-   "hpLost": 0.439,
-   "rounds": 5.978,
-   "potions": 0.695
+   "fights": 20763,
+   "lossRate": 0.065,
+   "hpLost": 0.448,
+   "rounds": 6.168,
+   "potions": 0.719
   },
   {
    "id": "ashe",
    "name": "Ashe",
    "chapter": "champions",
-   "fights": 3188,
-   "lossRate": 0.099,
-   "hpLost": 0.431,
-   "rounds": 5.572,
-   "potions": 0.57
+   "fights": 21247,
+   "lossRate": 0.102,
+   "hpLost": 0.419,
+   "rounds": 5.62,
+   "potions": 0.549
   },
   {
    "id": "soraka",
    "name": "Soraka",
    "chapter": "champions",
-   "fights": 3210,
-   "lossRate": 0.044,
-   "hpLost": 0.367,
-   "rounds": 14.208,
-   "potions": 0.462
+   "fights": 20931,
+   "lossRate": 0.054,
+   "hpLost": 0.371,
+   "rounds": 14.38,
+   "potions": 0.54
   },
   {
    "id": "lux",
    "name": "Lux",
    "chapter": "champions",
-   "fights": 3155,
-   "lossRate": 0.045,
-   "hpLost": 0.436,
-   "rounds": 6.899,
-   "potions": 0.551
+   "fights": 20544,
+   "lossRate": 0.052,
+   "hpLost": 0.435,
+   "rounds": 7.064,
+   "potions": 0.542
   },
   {
    "id": "darius",
    "name": "Darius",
    "chapter": "champions",
-   "fights": 3071,
+   "fights": 20387,
    "lossRate": 0.028,
-   "hpLost": 0.362,
-   "rounds": 8.832,
-   "potions": 0.769
+   "hpLost": 0.351,
+   "rounds": 8.898,
+   "potions": 0.754
   },
   {
    "id": "katarina",
    "name": "Katarina",
    "chapter": "champions",
-   "fights": 3061,
-   "lossRate": 0.008,
-   "hpLost": 0.24,
-   "rounds": 6.686,
-   "potions": 1.36
+   "fights": 19657,
+   "lossRate": 0.009,
+   "hpLost": 0.238,
+   "rounds": 6.835,
+   "potions": 1.412
   },
   {
    "id": "janna",
    "name": "Janna",
    "chapter": "champions",
-   "fights": 3158,
-   "lossRate": 0.021,
-   "hpLost": 0.34,
-   "rounds": 12.826,
-   "potions": 0.276
-  },
-  {
-   "id": "leona",
-   "name": "Leona",
-   "chapter": "champions",
-   "fights": 3108,
-   "lossRate": 0.065,
-   "hpLost": 0.472,
-   "rounds": 9.407,
-   "potions": 0.826
-  },
-  {
-   "id": "caitlyn",
-   "name": "Caitlyn",
-   "chapter": "champions",
-   "fights": 3097,
-   "lossRate": 0.021,
-   "hpLost": 0.257,
-   "rounds": 8.126,
-   "potions": 1.361
+   "fights": 20767,
+   "lossRate": 0.025,
+   "hpLost": 0.35,
+   "rounds": 13.061,
+   "potions": 0.33
   },
   {
    "id": "zed",
    "name": "Zed",
    "chapter": "champions",
-   "fights": 3170,
-   "lossRate": 0.065,
-   "hpLost": 0.474,
-   "rounds": 7.063,
-   "potions": 1.197
-  },
-  {
-   "id": "jinx",
-   "name": "Jinx",
-   "chapter": "champions",
-   "fights": 3151,
-   "lossRate": 0.022,
-   "hpLost": 0.316,
-   "rounds": 6.418,
-   "potions": 1.111
-  },
-  {
-   "id": "malphite",
-   "name": "Malphite",
-   "chapter": "champions",
-   "fights": 3053,
-   "lossRate": 0.044,
-   "hpLost": 0.449,
-   "rounds": 11.925,
-   "potions": 0.871
+   "fights": 20882,
+   "lossRate": 0.058,
+   "hpLost": 0.46,
+   "rounds": 7.13,
+   "potions": 1.204
   },
   {
    "id": "yasuo",
    "name": "Yasuo",
    "chapter": "champions",
-   "fights": 3230,
-   "lossRate": 0.124,
-   "hpLost": 0.502,
-   "rounds": 11.439,
-   "potions": 1.053
+   "fights": 21446,
+   "lossRate": 0.123,
+   "hpLost": 0.505,
+   "rounds": 11.587,
+   "potions": 0.986
+  },
+  {
+   "id": "leona",
+   "name": "Leona",
+   "chapter": "champions",
+   "fights": 20541,
+   "lossRate": 0.081,
+   "hpLost": 0.473,
+   "rounds": 9.634,
+   "potions": 0.861
+  },
+  {
+   "id": "malphite",
+   "name": "Malphite",
+   "chapter": "champions",
+   "fights": 20761,
+   "lossRate": 0.058,
+   "hpLost": 0.452,
+   "rounds": 12.218,
+   "potions": 0.826
+  },
+  {
+   "id": "jinx",
+   "name": "Jinx",
+   "chapter": "champions",
+   "fights": 20477,
+   "lossRate": 0.025,
+   "hpLost": 0.32,
+   "rounds": 6.57,
+   "potions": 1.099
+  },
+  {
+   "id": "caitlyn",
+   "name": "Caitlyn",
+   "chapter": "champions",
+   "fights": 20333,
+   "lossRate": 0.019,
+   "hpLost": 0.25,
+   "rounds": 8.25,
+   "potions": 1.402
   },
   {
    "id": "ahri",
    "name": "Ahri",
    "chapter": "champions",
-   "fights": 3074,
-   "lossRate": 0.019,
+   "fights": 20370,
+   "lossRate": 0.017,
    "hpLost": 0.452,
-   "rounds": 8.025,
-   "potions": 0.853
+   "rounds": 8.206,
+   "potions": 0.793
   },
   {
    "id": "scuttler",
    "name": "Carapateur",
    "chapter": "jungle",
-   "fights": 2316,
+   "fights": 14481,
    "lossRate": 0,
-   "hpLost": 0.228,
-   "rounds": 16.016,
-   "potions": 0.087
+   "hpLost": 0.211,
+   "rounds": 8.495,
+   "potions": 0.023
   },
   {
    "id": "gromp",
    "name": "Gromp",
    "chapter": "jungle",
-   "fights": 2316,
+   "fights": 14480,
    "lossRate": 0,
-   "hpLost": 0.369,
-   "rounds": 9.975,
-   "potions": 0.14
+   "hpLost": 0.296,
+   "rounds": 7.595,
+   "potions": 0.006
   },
   {
    "id": "krugs",
    "name": "Krugs anciens",
    "chapter": "jungle",
-   "fights": 2316,
+   "fights": 14480,
    "lossRate": 0,
-   "hpLost": 0.354,
-   "rounds": 13.071,
-   "potions": 0.384
+   "hpLost": 0.266,
+   "rounds": 7.839,
+   "potions": 0.016
   },
   {
    "id": "raptors",
    "name": "Corbins",
    "chapter": "jungle",
-   "fights": 2316,
+   "fights": 14480,
    "lossRate": 0,
-   "hpLost": 0.283,
-   "rounds": 7.496,
-   "potions": 0.109
+   "hpLost": 0.322,
+   "rounds": 7.261,
+   "potions": 0.05
   },
   {
    "id": "wolves",
    "name": "Loups des ténèbres",
    "chapter": "jungle",
-   "fights": 2316,
+   "fights": 14480,
    "lossRate": 0,
    "hpLost": 0.289,
-   "rounds": 9.978,
-   "potions": 0.173
+   "rounds": 7.604,
+   "potions": 0.057
   },
   {
    "id": "blue",
    "name": "Sentinelle bleue",
    "chapter": "jungle",
-   "fights": 2316,
-   "lossRate": 0.002,
-   "hpLost": 0.302,
-   "rounds": 19.394,
-   "potions": 0.16
+   "fights": 14480,
+   "lossRate": 0,
+   "hpLost": 0.206,
+   "rounds": 11.064,
+   "potions": 0.003
   },
   {
    "id": "red",
    "name": "Brambleback rouge",
    "chapter": "jungle",
-   "fights": 2311,
+   "fights": 14480,
    "lossRate": 0,
-   "hpLost": 0.319,
-   "rounds": 10.568,
-   "potions": 0.119
-  },
-  {
-   "id": "dragon-cloud",
-   "name": "Dragon des nuages",
-   "chapter": "dragons",
-   "fights": 2233,
-   "lossRate": 0.005,
-   "hpLost": 0.341,
-   "rounds": 19.125,
-   "potions": 0.568
-  },
-  {
-   "id": "dragon-mountain",
-   "name": "Dragon des montagnes",
-   "chapter": "dragons",
-   "fights": 2261,
-   "lossRate": 0.017,
-   "hpLost": 0.286,
-   "rounds": 24.226,
-   "potions": 0.335
-  },
-  {
-   "id": "dragon-chemtech",
-   "name": "Dragon chimtech",
-   "chapter": "dragons",
-   "fights": 2232,
-   "lossRate": 0.006,
-   "hpLost": 0.325,
-   "rounds": 17.417,
-   "potions": 0.492
-  },
-  {
-   "id": "dragon-ocean",
-   "name": "Dragon de l'océan",
-   "chapter": "dragons",
-   "fights": 2237,
-   "lossRate": 0.01,
-   "hpLost": 0.305,
-   "rounds": 19.333,
-   "potions": 0.435
-  },
-  {
-   "id": "dragon-infernal",
-   "name": "Dragon infernal",
-   "chapter": "dragons",
-   "fights": 2224,
-   "lossRate": 0,
-   "hpLost": 0.32,
-   "rounds": 11.649,
-   "potions": 0.404
+   "hpLost": 0.292,
+   "rounds": 7.651,
+   "potions": 0.012
   },
   {
    "id": "dragon-hextech",
    "name": "Dragon hextech",
    "chapter": "dragons",
-   "fights": 2236,
-   "lossRate": 0.005,
-   "hpLost": 0.342,
-   "rounds": 15.449,
-   "potions": 0.551
+   "fights": 14159,
+   "lossRate": 0.015,
+   "hpLost": 0.399,
+   "rounds": 11.662,
+   "potions": 0.728
+  },
+  {
+   "id": "dragon-ocean",
+   "name": "Dragon de l'océan",
+   "chapter": "dragons",
+   "fights": 13985,
+   "lossRate": 0.004,
+   "hpLost": 0.371,
+   "rounds": 13.113,
+   "potions": 0.555
+  },
+  {
+   "id": "dragon-infernal",
+   "name": "Dragon infernal",
+   "chapter": "dragons",
+   "fights": 14093,
+   "lossRate": 0.01,
+   "hpLost": 0.411,
+   "rounds": 11.037,
+   "potions": 0.989
+  },
+  {
+   "id": "dragon-mountain",
+   "name": "Dragon des montagnes",
+   "chapter": "dragons",
+   "fights": 13952,
+   "lossRate": 0.001,
+   "hpLost": 0.289,
+   "rounds": 13.399,
+   "potions": 0.221
+  },
+  {
+   "id": "dragon-cloud",
+   "name": "Dragon des nuages",
+   "chapter": "dragons",
+   "fights": 14143,
+   "lossRate": 0.012,
+   "hpLost": 0.375,
+   "rounds": 12.152,
+   "potions": 0.653
+  },
+  {
+   "id": "dragon-chemtech",
+   "name": "Dragon chimtech",
+   "chapter": "dragons",
+   "fights": 13981,
+   "lossRate": 0.003,
+   "hpLost": 0.388,
+   "rounds": 13.189,
+   "potions": 0.662
   },
   {
    "id": "baron",
    "name": "Baron Nashor",
    "chapter": "baron",
-   "fights": 2211,
-   "lossRate": 0.275,
-   "hpLost": 0.696,
-   "rounds": 25.712,
-   "potions": 2.155
+   "fights": 13846,
+   "lossRate": 0.355,
+   "hpLost": 0.656,
+   "rounds": 20.581,
+   "potions": 2.141
   },
   {
    "id": "garen",
    "name": "Garen",
    "chapter": "champions",
-   "fights": 3089,
-   "lossRate": 0.025,
-   "hpLost": 0.328,
-   "rounds": 10.184,
-   "potions": 0.855
+   "fights": 20436,
+   "lossRate": 0.026,
+   "hpLost": 0.318,
+   "rounds": 10.282,
+   "potions": 0.81
   }
  ]
 }
