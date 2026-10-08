@@ -55,8 +55,8 @@ export function createCombatant(
 
 export function createBattle(player: Combatant, enemy: Combatant, seed: number): BattleState {
   const state: BattleState = {
-    player: structuredClone(player),
-    enemy: structuredClone(enemy),
+    player: cloneCombatant(player),
+    enemy: cloneCombatant(enemy),
     turn: "player",
     round: 1,
     rng: seed,
@@ -65,6 +65,16 @@ export function createBattle(player: Combatant, enemy: Combatant, seed: number):
   };
   for (const side of ["player", "enemy"] as const) applyStartShield(state, side);
   return state;
+}
+
+/** Copie rapide d'un combattant (les simulations en font des millions). */
+export function cloneCombatant(c: Combatant): Combatant {
+  return { ...c, base: { ...c.base }, cooldowns: { ...c.cooldowns }, statuses: c.statuses.map((st) => ({ ...st })) };
+}
+
+/** Copie rapide de l'état ; les entrées du journal ne sont jamais modifiées, on les partage. */
+export function cloneBattle(s: BattleState): BattleState {
+  return { ...s, player: cloneCombatant(s.player), enemy: cloneCombatant(s.enemy), log: [...s.log] };
 }
 
 // ---------------------------------------------------------------------------
@@ -169,6 +179,12 @@ export interface Estimate {
 }
 
 export function estimateAction(state: BattleState, side: Side, action: Action): Estimate {
+  const est = estimateRaw(state, side, action);
+  const factor = pveFactor(state[side], state[opponent(side)]);
+  return { ...est, damage: est.damage * factor, dot: est.dot * factor };
+}
+
+function estimateRaw(state: BattleState, side: Side, action: Action): Estimate {
   const est: Estimate = { damage: 0, heal: 0, shield: 0, stun: 0, dot: 0, buff: 0, debuff: 0, dodge: 0 };
   const a = state[side];
   const d = state[opponent(side)];
@@ -229,7 +245,7 @@ export function estimateAction(state: BattleState, side: Side, action: Action): 
  * à l'adversaire (en sautant ses tours s'il est étourdi).
  */
 export function act(state: BattleState, action: Action): BattleState {
-  const s = structuredClone(state);
+  const s = cloneBattle(state);
   if (s.winner) return s;
   const side = s.turn;
 
@@ -255,12 +271,15 @@ function rand(s: BattleState): number {
 }
 
 function log(s: BattleState, entry: LogEntry) {
+  if (s.quiet) return;
   s.log.push(entry);
   if (s.log.length > 80) s.log.splice(0, s.log.length - 80);
 }
 
+const NUMBER_FORMAT = new Intl.NumberFormat("fr-FR");
+
 function fmt(n: number): string {
-  return Math.round(n).toLocaleString("fr-FR");
+  return NUMBER_FORMAT.format(Math.round(n));
 }
 
 function checkWinner(s: BattleState, lastActor: Side): boolean {
@@ -281,9 +300,23 @@ function heal(c: Combatant, amount: number): number {
   return c.hp - before;
 }
 
+/**
+ * Coefficient « JcE » d'un champion contre les monstres : il multiplie les dégâts
+ * qu'il leur inflige et divise ceux qu'il en reçoit. Il équilibre les parties
+ * complètes sans toucher aux duels entre champions.
+ */
+export function pveFactor(attacker: Combatant, target: Combatant): number {
+  const a = defOf(attacker);
+  const t = defOf(target);
+  if (a.art.kind === "champion" && t.art.kind === "monster") return a.pve ?? 1;
+  if (a.art.kind === "monster" && t.art.kind === "champion") return 1 / (t.pve ?? 1);
+  return 1;
+}
+
 /** Applique des dégâts déjà réduits par les résistances ; les boucliers absorbent en premier. */
-function applyDamage(s: BattleState, side: Side, amount: number): number {
+function applyDamage(s: BattleState, side: Side, amount: number, fromOpponent = true): number {
   const c = s[side];
+  if (fromOpponent) amount *= pveFactor(s[opponent(side)], c);
   let rest = Math.round(amount);
   for (const st of c.statuses) {
     if (st.kind !== "shield" || rest <= 0) continue;
@@ -557,7 +590,7 @@ function beginTurn(s: BattleState, side: Side): boolean {
     }
   }
   if (s.round >= SUDDEN_DEATH_ROUND) {
-    const dealt = applyDamage(s, side, stats.maxHp * 0.05 * (s.round - SUDDEN_DEATH_ROUND + 1));
+    const dealt = applyDamage(s, side, stats.maxHp * 0.05 * (s.round - SUDDEN_DEATH_ROUND + 1), false);
     log(s, { side: "system", text: `Mort subite : ${c.name} perd ${fmt(dealt)} PV.`, tone: "damage" });
   }
   if (c.hp <= 0) {

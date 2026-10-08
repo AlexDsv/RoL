@@ -8,8 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run",
-    "balance": "tsx scripts/balance.ts",
-    "tune": "tsx scripts/tune.ts"
+    "calibrate": "tsx scripts/calibrate.ts",
+    "report": "tsx scripts/report.ts"
   },
   "dependencies": {
     "next": "16.4.0",

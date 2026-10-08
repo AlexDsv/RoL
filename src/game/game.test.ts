@@ -72,7 +72,7 @@ describe("combat", () => {
     const a = playBattle(duel("ahri", "zed", 9, 7));
     const b = playBattle(duel("ahri", "zed", 9, 7));
     expect(a.winner).not.toBeNull();
-    expect(a.log).toEqual(b.log);
+    expect(a).toEqual(b);
   });
 
   it("l'IA choisit toujours une action jouable", () => {

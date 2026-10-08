@@ -1,4 +1,4 @@
-import { availableActions, effectiveStats, estimateAction, findSpell, opponent, totalShield } from "./battle";
+import { availableActions, cloneBattle, effectiveStats, estimateAction, findSpell, opponent, totalShield } from "./battle";
 import { getFighter } from "./data/fighters";
 import { nextRandom } from "./rng";
 import type { Action, Archetype, BattleState, Effect, Side, StatKey } from "./types";
@@ -32,7 +32,7 @@ const PERSONALITIES: Record<Archetype, Personality> = {
 const OFFENSIVE_STATS: StatKey[] = ["ad", "ap", "crit", "attackSpeed", "onHitCurrentHp"];
 
 /** Meilleurs dégâts qu'un camp peut infliger ce tour-ci (hors sorts de pur soutien). */
-function bestDamage(state: BattleState, side: Side): number {
+export function bestDamage(state: BattleState, side: Side): number {
   let best = 0;
   for (const action of availableActions(state, side)) {
     const est = estimateAction(state, side, action);
@@ -46,7 +46,7 @@ function statusValue(state: BattleState, side: Side, effect: Extract<Effect, { k
   const foeSide = opponent(side);
   const holder = effect.kind === "buff" ? side : foeSide;
   const sign = effect.kind === "buff" ? 1 : -1;
-  const tweaked = structuredClone(state);
+  const tweaked = cloneBattle(state);
   tweaked[holder].statuses.push({ id: "ai-probe", label: "", kind: effect.kind, stat: effect.stat, amount: sign * effect.amount, turns: effect.turns });
 
   const myGain = bestDamage(tweaked, side) - bestDamage(state, side);

@@ -1,93 +1,126 @@
-// Simulation automatique de parties, pour les tests et l'équilibrage.
-// Le joueur est piloté par la même IA que les adversaires, avec une stratégie
-// d'achat simple : ce n'est pas un joueur parfait, mais un joueur correct.
+// Simulation automatique de combats et de parties, pour les tests et l'équilibrage.
+// Les adversaires jouent avec l'IA du jeu (ai.ts) ; le joueur est piloté par le
+// joueur simulé (player-ai.ts), au niveau choisi.
 
 import { aiTurn } from "./ai";
-import { act, effectiveStats } from "./battle";
+import { act, createBattle, createCombatant, effectiveStats } from "./battle";
+import { BUILDS } from "./data/builds";
 import { getFighter } from "./data/fighters";
-import { ITEMS, type ItemDef } from "./data/items";
-import { buyBlock, buyItem, canUsePotion, drinkPotion, finishBattle, newRun, startBattle, type RunState } from "./run";
-import type { Archetype, BattleState, StatKey } from "./types";
+import { getItem, MAX_ITEMS } from "./data/items";
+import { choosePlayerAction, makeRand, potionToDrink, shopFor, SKILL_PROFILES, type Skill } from "./player-ai";
+import { chapterOf, drinkPotion, finishBattle, newRun, startBattle, STARTING_GOLD, type Chapter } from "./run";
+import type { BattleState, Stats } from "./types";
 
 const MAX_ACTIONS = 400;
 
+/** Combat où les deux camps sont joués par l'IA des adversaires. */
 export function playBattle(battle: BattleState): BattleState {
-  let b = battle;
+  let b: BattleState = { ...battle, quiet: true };
   for (let i = 0; i < MAX_ACTIONS && !b.winner; i++) b = act(b, aiTurn(b));
   return b;
 }
 
-const PREFERRED: Record<Archetype, StatKey[]> = {
-  fighter: ["ad", "maxHp", "armor", "lifesteal"],
-  tank: ["maxHp", "armor", "mr", "ap"],
-  assassin: ["ad", "ap", "crit", "lifesteal"],
-  mage: ["ap", "maxHp", "mr"],
-  marksman: ["ad", "crit", "attackSpeed", "lifesteal", "onHitCurrentHp"],
-  support: ["ap", "maxHp", "armor", "mr"],
-  monster: [],
-  dragon: [],
-  baron: [],
-};
-
-function itemValue(item: ItemDef, wanted: StatKey[]): number {
-  if (!item.stats) return 0;
-  let fit = 0;
-  for (const key of wanted) if (item.stats[key]) fit++;
-  return fit === 0 ? 0 : item.cost * (1 + fit * 0.3);
+/** Objets du build qu'on peut s'offrir avec ce budget (légendaires, puis composants avec le reste). */
+export function itemsForBudget(championId: string, gold: number): string[] {
+  const build = BUILDS[championId];
+  const items: string[] = [];
+  let left = gold;
+  for (const id of build.core) {
+    if (items.length >= MAX_ITEMS || getItem(id).cost > left) break;
+    items.push(id);
+    left -= getItem(id).cost;
+  }
+  for (const id of build.early) {
+    if (items.length >= MAX_ITEMS) break;
+    if (getItem(id).cost <= left) {
+      items.push(id);
+      left -= getItem(id).cost;
+    }
+  }
+  return items;
 }
 
-/** Achats automatiques : potions d'abord, puis le meilleur objet adapté. */
-export function autoShop(run: RunState): RunState {
-  let r = run;
-  const wanted = PREFERRED[getFighter(r.championId).archetype];
-  while ((r.potions["health-potion"] ?? 0) < 3 && buyBlock(r, "health-potion") === null) r = buyItem(r, "health-potion");
+/** Or gagné en moyenne avant d'atteindre ce niveau pendant la phase des champions. */
+export function budgetAtLevel(level: number): number {
+  let gold = STARTING_GOLD - 120; // deux potions
+  for (let stage = 0; stage < level - 1; stage++) gold += 250 + 60 * stage;
+  return gold;
+}
 
-  for (;;) {
-    const candidates = ITEMS.filter((i) => (i.kind === "legendary" || i.kind === "component") && !r.items.includes(i.id))
-      .filter((i) => buyBlock(r, i.id) === null)
-      .map((i) => ({ item: i, value: itemValue(i, wanted) }))
-      .filter((c) => c.value > 0)
-      .sort((a, b) => b.value - a.value);
-    // Inventaire plein : revendre le composant le moins cher pour un légendaire.
-    if (r.items.length >= 6) break;
-    const best = candidates[0];
-    if (!best) break;
-    // Garder de l'or pour un légendaire s'il est presque abordable.
-    if (best.item.kind === "component" && r.items.length >= 4) break;
-    r = buyItem(r, best.item.id);
-  }
-  return r;
+function itemStats(championId: string, level: number): Partial<Stats>[] {
+  return itemsForBudget(championId, budgetAtLevel(level)).map((id) => getItem(id).stats ?? {});
+}
+
+/** Duel entre deux champions de même niveau, équipés selon leur build et le budget de ce niveau. */
+export function playDuel(aId: string, bId: string, level: number, seed: number): BattleState {
+  const a = createCombatant(getFighter(aId), level, itemStats(aId, level));
+  const b = createCombatant(getFighter(bId), level, itemStats(bId, level));
+  return playBattle(createBattle(a, b, seed));
+}
+
+export interface FightRecord {
+  enemyId: string;
+  chapter: Chapter;
+  won: boolean;
+  rounds: number;
+  hpBefore: number;
+  hpAfter: number;
+  potionsUsed: number;
 }
 
 export interface RunOutcome {
+  championId: string;
+  skill: Skill;
   won: boolean;
   stage: number;
   diedTo: string | null;
-  /** Adversaires affrontés, avec les PV restants (en %) à la fin de chaque combat. */
-  fights: { enemyId: string; hpLeft: number }[];
+  fights: FightRecord[];
 }
 
-export function simulateRun(championId: string, seed: number): RunOutcome {
+export function simulateRun(championId: string, seed: number, skill: Skill = "average"): RunOutcome {
+  const profile = SKILL_PROFILES[skill];
+  const rand = makeRand(seed ^ 0x5bd1e995);
   let run = newRun(championId, seed);
-  const fights: RunOutcome["fights"] = [];
-  for (let guard = 0; guard < 100 && run.status !== "won" && run.status !== "lost"; guard++) {
-    run = autoShop(run);
+  const fights: FightRecord[] = [];
+
+  for (let guard = 0; guard < 100 && run.status === "map"; guard++) {
+    run = shopFor(run, profile, rand);
     run = startBattle(run);
-    let b = run.battle!;
+    let b: BattleState = { ...run.battle!, quiet: true };
+    const maxHp = effectiveStats(b.player).maxHp;
+    const hpBefore = b.player.hp / maxHp;
+    let potionsUsed = 0;
+
     for (let i = 0; i < MAX_ACTIONS && !b.winner; i++) {
       if (b.turn === "player") {
-        const ratio = b.player.hp / effectiveStats(b.player).maxHp;
-        if (ratio < 0.35 && canUsePotion({ ...run, battle: b }, "health-potion")) {
-          run = drinkPotion({ ...run, battle: b }, "health-potion");
+        const potion = potionToDrink(run, b, profile, rand);
+        if (potion) {
+          run = drinkPotion({ ...run, battle: b }, potion);
           b = run.battle!;
+          potionsUsed++;
         }
+        b = act(b, choosePlayerAction(b, profile, rand));
+      } else {
+        b = act(b, aiTurn(b));
       }
-      b = act(b, aiTurn(b));
     }
-    fights.push({ enemyId: b.enemy.defId, hpLeft: b.player.hp / effectiveStats(b.player).maxHp });
+
+    const enemy = getFighter(b.enemy.defId);
+    fights.push({
+      enemyId: enemy.id,
+      chapter: chapterOf(enemy),
+      won: b.winner === "player",
+      rounds: b.round,
+      hpBefore,
+      hpAfter: Math.max(0, b.player.hp) / effectiveStats(b.player).maxHp,
+      potionsUsed,
+    });
     run = finishBattle({ ...run, battle: b });
   }
+
   return {
+    championId,
+    skill,
     won: run.status === "won",
     stage: run.stage,
     diedTo: run.status === "lost" ? run.ladder[run.stage] : null,
