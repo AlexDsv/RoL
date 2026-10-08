@@ -38,6 +38,7 @@ export function createCombatant(
   hpRatio = 1,
 ): Combatant {
   const base = addStats(statsAtLevel(def, level), ...bonuses);
+  if (def.hpScale) base.maxHp = Math.round(base.maxHp * def.hpScale);
   return {
     defId: def.id,
     name: def.name,
@@ -180,7 +181,7 @@ export interface Estimate {
 
 export function estimateAction(state: BattleState, side: Side, action: Action): Estimate {
   const est = estimateRaw(state, side, action);
-  const factor = pveFactor(state[side], state[opponent(side)]);
+  const factor = damageFactor(state, side);
   return { ...est, damage: est.damage * factor, dot: est.dot * factor };
 }
 
@@ -301,22 +302,22 @@ function heal(c: Combatant, amount: number): number {
 }
 
 /**
- * Coefficient « JcE » d'un champion contre les monstres : il multiplie les dégâts
- * qu'il leur inflige et divise ceux qu'il en reçoit. Il équilibre les parties
- * complètes sans toucher aux duels entre champions.
+ * Multiplicateur des dégâts infligés par un camp : dégâts propres aux monstres et,
+ * en partie, coefficient « en partie » du champion joué (dégâts infligés × coef,
+ * dégâts subis ÷ coef). Vaut 1 dans un duel entre champions.
  */
-export function pveFactor(attacker: Combatant, target: Combatant): number {
-  const a = defOf(attacker);
-  const t = defOf(target);
-  if (a.art.kind === "champion" && t.art.kind === "monster") return a.pve ?? 1;
-  if (a.art.kind === "monster" && t.art.kind === "champion") return 1 / (t.pve ?? 1);
-  return 1;
+export function damageFactor(s: BattleState, attackerSide: Side): number {
+  const attacker = defOf(s[attackerSide]);
+  const target = defOf(s[opponent(attackerSide)]);
+  let factor = attacker.damageScale ?? 1;
+  if (s.run) factor *= attackerSide === "player" ? (attacker.runPower ?? 1) : 1 / (target.runPower ?? 1);
+  return factor;
 }
 
 /** Applique des dégâts déjà réduits par les résistances ; les boucliers absorbent en premier. */
 function applyDamage(s: BattleState, side: Side, amount: number, fromOpponent = true): number {
   const c = s[side];
-  if (fromOpponent) amount *= pveFactor(s[opponent(side)], c);
+  if (fromOpponent) amount *= damageFactor(s, opponent(side));
   let rest = Math.round(amount);
   for (const st of c.statuses) {
     if (st.kind !== "shield" || rest <= 0) continue;

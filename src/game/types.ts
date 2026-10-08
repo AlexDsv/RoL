@@ -119,8 +119,14 @@ export interface FighterDef {
   spells: SpellDef[];
   /** Difficulté d'une partie avec ce champion (1 facile à 3 difficile), mesurée par simulation. */
   difficulty?: 1 | 2 | 3;
-  /** Coefficient JcE (contre les monstres), calculé par scripts/calibrate.ts (1 par défaut). */
-  pve?: number;
+  /**
+   * Coefficient « en partie » d'un champion joué par le joueur : multiplie ses dégâts
+   * et divise ceux qu'il subit. N'agit pas dans les duels. Calculé par scripts/calibrate.ts.
+   */
+  runPower?: number;
+  /** Monstres : multiplicateurs de PV et de dégâts, calculés par scripts/calibrate.ts. */
+  hpScale?: number;
+  damageScale?: number;
   /** Coefficient d'équilibrage appliqué à tous ses dégâts, soins et boucliers (1 par défaut). */
   power?: number;
   /** Bonus permanent obtenu en battant ce monstre (buffs de jungle, dragons). */
@@ -178,4 +184,6 @@ export interface BattleState {
   winner: Side | null;
   /** Simulation : pas de journal, pour aller plus vite. */
   quiet?: boolean;
+  /** Combat d'une partie (le coefficient « en partie » du joueur s'applique). */
+  run?: boolean;
 }

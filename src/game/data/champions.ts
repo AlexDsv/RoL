@@ -1,5 +1,5 @@
 import type { FighterDef } from "../types";
-import { BALANCE } from "./balance";
+import { CHAMPION_BALANCE } from "./balance";
 import { buff, debuff, dmg, dodge, dot, energy, heal, mana, noResource, shield, spell, stats, stun } from "./builders";
 
 export const CHAMPIONS: FighterDef[] = [
@@ -242,4 +242,4 @@ export const CHAMPIONS: FighterDef[] = [
 ];
 
 // Coefficients d'équilibrage générés par scripts/calibrate.ts.
-for (const c of CHAMPIONS) Object.assign(c, BALANCE[c.id]);
+for (const c of CHAMPIONS) Object.assign(c, CHAMPION_BALANCE[c.id]);

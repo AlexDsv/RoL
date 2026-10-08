@@ -1,4 +1,5 @@
 import type { FighterDef } from "../types";
+import { MONSTER_BALANCE } from "./balance";
 import { buff, debuff, dmg, dodge, dot, heal, monsterStats, shield, spell, stun } from "./builders";
 
 // Les monstres ont des stats fixes : ils arrivent toujours au même moment de
@@ -222,3 +223,6 @@ export const BARON: FighterDef = {
 };
 
 export const MONSTERS: FighterDef[] = [...JUNGLE, ...DRAGONS, BARON];
+
+// Multiplicateurs d'équilibrage générés par scripts/calibrate.ts.
+for (const m of MONSTERS) Object.assign(m, MONSTER_BALANCE[m.id]);

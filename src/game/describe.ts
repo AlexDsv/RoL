@@ -1,7 +1,7 @@
 // Descriptions détaillées des sorts, passifs et attaques, générées depuis les
 // données : elles restent exactes quand on modifie l'équilibrage.
 
-import { ATTACK_POWER, CRIT_MULTIPLIER, DAMAGE_SCALE, effectiveStats, mitigate, opponent, pveFactor, scaleValue } from "./battle";
+import { ATTACK_POWER, CRIT_MULTIPLIER, DAMAGE_SCALE, damageFactor, effectiveStats, mitigate, opponent, scaleValue } from "./battle";
 import type { BattleState, DamageType, Effect, FighterDef, PassiveDef, Scaling, Side, SpellDef, StatKey } from "./types";
 
 export type DetailTone = "physical" | "magic" | "true" | "heal" | "shield" | "control" | "buff" | "debuff" | "info";
@@ -66,7 +66,7 @@ function damageValue(sc: Scaling, type: DamageType, ctx: DetailContext | undefin
   const caster = ctx.state[ctx.side];
   const target = ctx.state[opponent(ctx.side)];
   const raw = scaleValue(sc, caster, target);
-  const after = mitigate(raw, type, effectiveStats(target)) * pveFactor(caster, target);
+  const after = mitigate(raw, type, effectiveStats(target)) * damageFactor(ctx.state, ctx.side);
   const total = hits > 1 ? ` (×${hits} = ${n(after * hits)})` : "";
   return type === "true" ? `${n(after)}${total}` : `${n(after)} après résistances${total}`;
 }
@@ -171,7 +171,7 @@ export function describeAttack(def: FighterDef, ctx?: DetailContext): DetailLine
     const target = effectiveStats(ctx.state[opponent(ctx.side)]);
     lines.push({
       text: `Dégâts physiques : ${p(mult)} AD`,
-      value: `${n(mitigate(s.ad * ATTACK_POWER * power(def), "physical", target) * pveFactor(ctx.state[ctx.side], ctx.state[opponent(ctx.side)]))} après résistances`,
+      value: `${n(mitigate(s.ad * ATTACK_POWER * power(def), "physical", target) * damageFactor(ctx.state, ctx.side))} après résistances`,
       tone: "physical",
     });
     lines.push({ text: `Coup critique : ${p(s.crit)} de chances, dégâts ×${String(CRIT_MULTIPLIER).replace(".", ",")}`, tone: "info" });

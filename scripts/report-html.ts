@@ -19,7 +19,7 @@ interface Report {
   target: number;
   fights: number;
   minutes: number;
-  champions: { id: string; name: string; archetype: string; power: number; pve: number; difficulty: number }[];
+  champions: { id: string; name: string; archetype: string; power: number; runPower: number; difficulty: number }[];
   duels: { levels: number[]; perChampion: { id: string; winRate: number; ci: [number, number]; byLevel: number[] }[]; matrix: (number | null)[][]; rounds: number[]; total: number };
   runs: Record<Skill, { runs: number; winRate: number; ci: [number, number]; perChampion: ChampionRun[] }>;
   enemies: { id: string; name: string; chapter: string; fights: number; lossRate: number; hpLost: number; rounds: number; potions: number }[];
@@ -222,7 +222,7 @@ function tableRows(): string {
       return `<tr>
         <th scope="row">${esc(meta.name)}</th><td>${ARCH[meta.archetype] ?? meta.archetype}</td>
         <td>${pct(d.winRate)}</td><td>${pct(b.winRate)}</td><td><strong>${pct(c.winRate)}</strong> <span class="ci">${pct(c.ci[0])}–${pct(c.ci[1])}</span></td><td>${pct(e.winRate)}</td>
-        <td>${c.avgStage.toFixed(1).replace(".", ",")}</td><td>${meta.power.toFixed(2).replace(".", ",")}</td><td>${meta.pve.toFixed(2).replace(".", ",")}</td>
+        <td>${c.avgStage.toFixed(1).replace(".", ",")}</td><td>${meta.power.toFixed(2).replace(".", ",")}</td><td>${meta.runPower.toFixed(2).replace(".", ",")}</td>
         <td>${DIFF[meta.difficulty]}</td><td><span class="pill ${ok ? "ok" : "warn"}">${ok ? "✓ dans la cible" : "⚠ hors cible"}</span></td>
       </tr>`;
     })
@@ -342,7 +342,7 @@ footer { color: var(--muted); font-size: 12.5px; }
   <section aria-labelledby="t-title">
     <h2 id="t-title">Tableau complet</h2>
     <div class="scroll"><table>
-      <thead><tr><th>Champion</th><th>Type</th><th>Duels</th><th>Débutant</th><th>Moyen (IC 95 %)</th><th>Expert</th><th>Étape moy.</th><th>Coef. duel</th><th>Coef. JcE</th><th>Difficulté</th><th>Statut</th></tr></thead>
+      <thead><tr><th>Champion</th><th>Type</th><th>Duels</th><th>Débutant</th><th>Moyen (IC 95 %)</th><th>Expert</th><th>Étape moy.</th><th>Coef. duel</th><th>Coef. partie</th><th>Difficulté</th><th>Statut</th></tr></thead>
       <tbody>${tableRows()}</tbody>
     </table></div>
     <p class="lead">Durée moyenne des duels : ${report.duels.levels.map((lv, i) => `${report.duels.rounds[i].toFixed(1).replace(".", ",")} rounds au niveau ${lv}`).join(", ")}.</p>

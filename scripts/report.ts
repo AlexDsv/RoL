@@ -9,6 +9,7 @@ import { execSync } from "node:child_process";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { CHAMPIONS } from "../src/game/data/champions";
 import { getFighter } from "../src/game/data/fighters";
+import { MONSTERS } from "../src/game/data/monsters";
 import { SKILL_PROFILES, type Skill } from "../src/game/player-ai";
 import { chapterOf } from "../src/game/run";
 import { DUEL_LEVELS, duelTasks } from "./calibrate";
@@ -120,7 +121,8 @@ async function main() {
     target: TARGET,
     fights,
     minutes: Math.round((Date.now() - started) / 6000) / 10,
-    champions: CHAMPIONS.map((c) => ({ id: c.id, name: c.name, archetype: c.archetype, power: c.power, pve: c.pve, difficulty: c.difficulty })),
+    champions: CHAMPIONS.map((c) => ({ id: c.id, name: c.name, archetype: c.archetype, power: c.power, runPower: c.runPower, difficulty: c.difficulty })),
+    monsters: MONSTERS.map((m) => ({ id: m.id, hpScale: m.hpScale, damageScale: m.damageScale })),
     duels: duelReport(duelResults),
     runs: Object.fromEntries((["beginner", "average", "expert"] as Skill[]).map((s) => [s, runReport(runsBySkill[s])])),
     enemies: enemyReport(runsBySkill.average),

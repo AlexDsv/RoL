@@ -1,22 +1,40 @@
 // Fichier généré par `npm run calibrate` : ne pas modifier à la main.
-// power : coefficient de duel ; pve : coefficient contre les monstres ; difficulty : 1 facile à 3 difficile.
+// Champions — power : coefficient de duel ; runPower : coefficient en partie (joueur) ; difficulty : 1 facile à 3 difficile.
+// Monstres — hpScale et damageScale : multiplicateurs de PV et de dégâts.
 
 import type { FighterDef } from "../types";
 
-export const BALANCE: Record<string, Pick<FighterDef, "power" | "pve" | "difficulty">> = {
-  garen: { power: 0.99, pve: 1, difficulty: 1 },
-  darius: { power: 0.97, pve: 1, difficulty: 1 },
-  yasuo: { power: 0.98, pve: 1, difficulty: 1 },
-  malphite: { power: 1.07, pve: 1, difficulty: 1 },
-  leona: { power: 1.38, pve: 1, difficulty: 3 },
-  zed: { power: 0.83, pve: 1, difficulty: 3 },
-  katarina: { power: 1.05, pve: 1, difficulty: 3 },
-  ahri: { power: 0.99, pve: 1, difficulty: 1 },
-  lux: { power: 1.16, pve: 1, difficulty: 3 },
-  annie: { power: 1.13, pve: 1, difficulty: 3 },
-  jinx: { power: 1.09, pve: 1, difficulty: 2 },
-  ashe: { power: 1.38, pve: 1, difficulty: 2 },
-  caitlyn: { power: 1.03, pve: 1, difficulty: 3 },
-  soraka: { power: 1.29, pve: 1, difficulty: 2 },
-  janna: { power: 1.27, pve: 1, difficulty: 2 },
+export const CHAMPION_BALANCE: Record<string, Pick<FighterDef, "power" | "runPower" | "difficulty">> = {
+  garen: { power: 0.93, runPower: 1, difficulty: 2 },
+  darius: { power: 0.86, runPower: 1, difficulty: 2 },
+  yasuo: { power: 1.03, runPower: 1, difficulty: 1 },
+  malphite: { power: 1.06, runPower: 1, difficulty: 1 },
+  leona: { power: 1.41, runPower: 1, difficulty: 2 },
+  zed: { power: 0.98, runPower: 1, difficulty: 1 },
+  katarina: { power: 1.18, runPower: 1, difficulty: 1 },
+  ahri: { power: 0.95, runPower: 1, difficulty: 3 },
+  lux: { power: 1.19, runPower: 1, difficulty: 3 },
+  annie: { power: 1.22, runPower: 1, difficulty: 3 },
+  jinx: { power: 1.04, runPower: 1, difficulty: 2 },
+  ashe: { power: 1.37, runPower: 1, difficulty: 2 },
+  caitlyn: { power: 1.14, runPower: 1, difficulty: 1 },
+  soraka: { power: 1.2, runPower: 1, difficulty: 3 },
+  janna: { power: 1.21, runPower: 1, difficulty: 3 },
+};
+
+export const MONSTER_BALANCE: Record<string, Pick<FighterDef, "hpScale" | "damageScale">> = {
+  "scuttler": { hpScale: 1, damageScale: 1 },
+  "gromp": { hpScale: 1, damageScale: 1 },
+  "krugs": { hpScale: 1, damageScale: 1 },
+  "raptors": { hpScale: 1, damageScale: 1 },
+  "wolves": { hpScale: 1, damageScale: 1 },
+  "blue": { hpScale: 1, damageScale: 1 },
+  "red": { hpScale: 1, damageScale: 1 },
+  "dragon-infernal": { hpScale: 1, damageScale: 1 },
+  "dragon-mountain": { hpScale: 1, damageScale: 1 },
+  "dragon-ocean": { hpScale: 1, damageScale: 1 },
+  "dragon-cloud": { hpScale: 1, damageScale: 1 },
+  "dragon-hextech": { hpScale: 1, damageScale: 1 },
+  "dragon-chemtech": { hpScale: 1, damageScale: 1 },
+  "baron": { hpScale: 1, damageScale: 1 },
 };

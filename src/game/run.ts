@@ -139,7 +139,7 @@ export function startBattle(run: RunState): RunState {
   const player = createCombatant(getFighter(run.championId), level, playerBonuses(run), run.hpRatio);
   const enemy = createCombatant(enemyDef, enemyLevel(run), [enemyBonus(enemyDef, run.stage)]);
   const [, rng] = nextRandom(run.rng);
-  return { ...run, rng, status: "battle", battle: createBattle(player, enemy, run.rng), lastResult: null };
+  return { ...run, rng, status: "battle", battle: { ...createBattle(player, enemy, run.rng), run: true }, lastResult: null };
 }
 
 export function canUsePotion(run: RunState, itemId: string): boolean {

@@ -1,12 +1,14 @@
 // Tâches de simulation exécutables dans un processus séparé.
 import { CHAMPIONS } from "../../src/game/data/champions";
+import { MONSTERS } from "../../src/game/data/monsters";
 import type { Skill } from "../../src/game/player-ai";
 import { playDuel, simulateRun } from "../../src/game/sim";
 
 /** Valeurs d'équilibrage à appliquer avant de simuler (sans modifier les fichiers). */
 export interface Overrides {
   power?: Record<string, number>;
-  pve?: Record<string, number>;
+  runPower?: Record<string, number>;
+  monsters?: Record<string, { hpScale: number; damageScale: number }>;
 }
 
 export type Task =
@@ -23,8 +25,9 @@ export type TaskResult =
 export function applyOverrides(o: Overrides) {
   for (const c of CHAMPIONS) {
     if (o.power?.[c.id] !== undefined) c.power = o.power[c.id];
-    if (o.pve?.[c.id] !== undefined) c.pve = o.pve[c.id];
+    if (o.runPower?.[c.id] !== undefined) c.runPower = o.runPower[c.id];
   }
+  for (const m of MONSTERS) if (o.monsters?.[m.id]) Object.assign(m, o.monsters[m.id]);
 }
 
 export function runTask(t: Task): TaskResult {
