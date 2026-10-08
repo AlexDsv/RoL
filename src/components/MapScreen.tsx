@@ -3,10 +3,8 @@
 import { useState } from "react";
 import { createCombatant } from "@/game/battle";
 import { getFighter } from "@/game/data/fighters";
-import { getItem, ITEMS, MAX_ITEMS, type ItemKind } from "@/game/data/items";
+import { getItem, MAX_ITEMS } from "@/game/data/items";
 import {
-  buyBlock,
-  buyItem,
   chapterOf,
   currentEnemy,
   currentHp,
@@ -17,11 +15,11 @@ import {
   sellItem,
   sellPrice,
   startBattle,
-  type BuyBlock,
   type Chapter,
   type RunState,
 } from "@/game/run";
 import { Kit } from "./Kit";
+import { Shop } from "./Shop";
 import {
   ArchetypeChip,
   Bar,
@@ -30,7 +28,7 @@ import {
   Gold,
   ItemIcon,
   Portrait,
-  StatGrid,
+  StatSheet,
 } from "./ui";
 
 const CHAPTER_LABELS: Record<Chapter, string> = {
@@ -104,7 +102,7 @@ export function MapScreen({ run, setRun, onAbandon }: Props) {
                 </span>
               )}
             </div>
-            <StatGrid stats={stats} />
+            <StatSheet base={stats} />
             <Inventory run={run} setRun={setRun} />
             {run.rewards.length > 0 && (
               <div>
@@ -180,8 +178,8 @@ export function MapScreen({ run, setRun, onAbandon }: Props) {
                 </p>
               </div>
             </div>
-            <StatGrid
-              stats={
+            <StatSheet
+              base={
                 createCombatant(enemy, enemyLevel(run), [
                   enemyBonus(enemy, run.stage),
                 ]).base
@@ -337,76 +335,3 @@ function Inventory({
   );
 }
 
-const SHOP_TABS: { label: string; kinds: ItemKind[] }[] = [
-  { label: "Consommables", kinds: ["potion", "elixir"] },
-  { label: "Composants", kinds: ["component"] },
-  { label: "Légendaires", kinds: ["legendary"] },
-];
-
-const BLOCK_LABELS: Record<Exclude<BuyBlock, null>, string> = {
-  gold: "Pas assez d'or",
-  full: "Inventaire plein",
-  elixir: "Un élixir est déjà actif",
-  potions: "Maximum atteint",
-};
-
-function Shop({
-  run,
-  setRun,
-}: {
-  run: RunState;
-  setRun: (run: RunState) => void;
-}) {
-  const [tab, setTab] = useState(0);
-  const items = ITEMS.filter((i) => SHOP_TABS[tab].kinds.includes(i.kind));
-  return (
-    <section className="panel p-4" aria-label="Boutique">
-      <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-        <h2 className="title text-lg">Boutique</h2>
-        <Gold amount={run.gold} />
-      </div>
-      <div className="mb-3 flex gap-1.5" role="tablist">
-        {SHOP_TABS.map((t, i) => (
-          <button
-            key={t.label}
-            type="button"
-            role="tab"
-            aria-selected={tab === i}
-            onClick={() => setTab(i)}
-            className={`btn !px-3 !py-1 text-xs ${tab === i ? "btn-primary" : "btn-ghost"}`}
-          >
-            {t.label}
-          </button>
-        ))}
-      </div>
-      <ul className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3" role="tabpanel">
-        {items.map((item) => {
-          const block = buyBlock(run, item.id);
-          return (
-            <li
-              key={item.id}
-              className="flex items-center gap-3 rounded-lg border border-line bg-black/20 p-2"
-            >
-              <ItemIcon item={item} className="h-11 w-11 shrink-0" />
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-bold">{item.name}</p>
-                <p className="text-xs leading-snug text-muted">
-                  {item.description}
-                </p>
-              </div>
-              <button
-                type="button"
-                className="btn btn-ghost shrink-0 !px-2 !py-1 text-xs"
-                disabled={block !== null}
-                title={block ? BLOCK_LABELS[block] : `Acheter ${item.name}`}
-                onClick={() => setRun(buyItem(run, item.id))}
-              >
-                <Gold amount={item.cost} />
-              </button>
-            </li>
-          );
-        })}
-      </ul>
-    </section>
-  );
-}

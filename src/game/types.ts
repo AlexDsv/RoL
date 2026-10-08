@@ -186,4 +186,6 @@ export interface BattleState {
   quiet?: boolean;
   /** Combat d'une partie (le coefficient « en partie » du joueur s'applique). */
   run?: boolean;
+  /** Dernière action jouée, pour les animations de l'interface. */
+  lastAction?: { seq: number; side: Side; kind: Action["kind"]; key?: SpellKey; crit?: boolean };
 }

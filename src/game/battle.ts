@@ -249,6 +249,7 @@ export function act(state: BattleState, action: Action): BattleState {
   const s = cloneBattle(state);
   if (s.winner) return s;
   const side = s.turn;
+  s.lastAction = { seq: (s.lastAction?.seq ?? 0) + 1, side, kind: action.kind, key: action.kind === "spell" ? action.key : undefined };
 
   if (action.kind === "potion") {
     applyPotion(s, side, action.itemId);
@@ -383,6 +384,7 @@ function autoAttack(s: BattleState, side: Side) {
     }
     a.attackCount++;
     const crit = rand(s) < as.crit;
+    if (crit && s.lastAction) s.lastAction.crit = true;
     let raw = as.ad * ATTACK_POWER * (defOf(a).power ?? 1) * (crit ? CRIT_MULTIPLIER : 1) + as.onHitCurrentHp * d.hp;
     let dealt = applyDamage(s, targetSide, mitigate(raw, "physical", ds));
     let text = `${a.name} attaque${crit ? " (critique !)" : ""} : ${fmt(dealt)} dégâts.`;

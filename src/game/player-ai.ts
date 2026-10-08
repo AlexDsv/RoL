@@ -6,7 +6,7 @@
 import { bestDamage, scoreAction } from "./ai";
 import { availableActions, effectiveStats, estimateAction, spellBlock, totalShield } from "./battle";
 import { BUILDS, type Build } from "./data/builds";
-import { getItem, ITEMS, MAX_ITEMS } from "./data/items";
+import { consumedComponents, effectiveCost, getItem, ITEMS, MAX_ITEMS } from "./data/items";
 import { nextRandom } from "./rng";
 import { buyBlock, buyItem, canUsePotion, chapterOf, currentEnemy, goldReward, sellItem, type RunState } from "./run";
 import type { Action, BattleState, DamageType, FighterDef } from "./types";
@@ -138,13 +138,23 @@ function elixirFor(build: Build): string {
   return "elixir-iron";
 }
 
-/** Fait de la place en revendant le composant le moins cher. */
-function freeSlot(run: RunState): RunState {
+/** Composants de la recette d'un légendaire qui manquent encore dans l'inventaire. */
+function missingComponents(owned: string[], itemId: string): string[] {
+  const used = consumedComponents(owned, itemId).map((i) => owned[i]);
+  const missing = [...(getItem(itemId).from ?? [])];
+  for (const id of used) missing.splice(missing.indexOf(id), 1);
+  return missing;
+}
+
+/** Fait de la place en revendant le composant le moins cher qui ne sert pas à l'objet visé. */
+function freeSlot(run: RunState, target: string): RunState {
   if (run.items.length < MAX_ITEMS) return run;
+  const keep = consumedComponents(run.items, target);
   let cheapest = -1;
   run.items.forEach((id, i) => {
     const item = getItem(id);
-    if (item.kind === "component" && (cheapest === -1 || item.cost < getItem(run.items[cheapest]).cost)) cheapest = i;
+    if (item.kind !== "component" || keep.includes(i)) return;
+    if (cheapest === -1 || item.cost < getItem(run.items[cheapest]).cost) cheapest = i;
   });
   return cheapest === -1 ? run : sellItem(run, cheapest);
 }
@@ -163,19 +173,20 @@ export function shopFor(run: RunState, profile: SkillProfile, rand: Rand): RunSt
     if (affordable.length) r = buyItem(r, affordable[Math.floor(rand() * affordable.length)].id);
   }
 
-  // Légendaires du build, tant qu'on peut se les offrir.
+  // Légendaires du build, tant qu'on peut se les offrir (composants possédés déduits).
   for (let guard = 0; guard < 6; guard++) {
     const next = nextCoreItem(r, build, profile);
-    if (!next || r.gold < getItem(next).cost) break;
-    const freed = freeSlot(r);
+    if (!next || r.gold < effectiveCost(r.items, next)) break;
+    const freed = buyBlock(r, next) === "full" ? freeSlot(r, next) : r;
     if (buyBlock(freed, next) !== null) break;
     r = buyItem(freed, next);
   }
 
-  // En attendant le prochain légendaire : les composants de départ.
-  for (const id of build.early) {
-    if (r.items.length >= MAX_ITEMS - 2 || r.items.includes(id)) continue;
-    if (buyBlock(r, id) === null) r = buyItem(r, id);
+  // En attendant : les composants de la recette du prochain légendaire.
+  const next = nextCoreItem(r, build, profile);
+  for (const part of next ? missingComponents(r.items, next) : []) {
+    if (r.items.length >= MAX_ITEMS) break;
+    if (buyBlock(r, part) === null) r = buyItem(r, part);
   }
 
   // Élixir avant les grands combats, s'il ne retarde pas le prochain légendaire.

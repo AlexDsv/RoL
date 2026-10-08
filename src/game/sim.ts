@@ -20,22 +20,25 @@ export function playBattle(battle: BattleState): BattleState {
   return b;
 }
 
-/** Objets du build qu'on peut s'offrir avec ce budget (légendaires, puis composants avec le reste). */
+/** Objets du build qu'on peut s'offrir avec ce budget : légendaires, puis composants du suivant. */
 export function itemsForBudget(championId: string, gold: number): string[] {
   const build = BUILDS[championId];
   const items: string[] = [];
   let left = gold;
   for (const id of build.core) {
-    if (items.length >= MAX_ITEMS || getItem(id).cost > left) break;
-    items.push(id);
-    left -= getItem(id).cost;
-  }
-  for (const id of build.early) {
     if (items.length >= MAX_ITEMS) break;
-    if (getItem(id).cost <= left) {
-      items.push(id);
-      left -= getItem(id).cost;
+    const cost = getItem(id).cost;
+    if (cost > left) {
+      for (const part of getItem(id).from ?? []) {
+        if (items.length < MAX_ITEMS && getItem(part).cost <= left) {
+          items.push(part);
+          left -= getItem(part).cost;
+        }
+      }
+      break;
     }
+    items.push(id);
+    left -= cost;
   }
   return items;
 }

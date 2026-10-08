@@ -157,6 +157,12 @@ export function ArchetypeChip({ def }: { def: FighterDef }) {
   return <span className="chip">{ARCHETYPE_LABELS[def.archetype]}</span>;
 }
 
+/** Prévisualisation sur une barre de vie : dégâts à venir (bouclier d'abord) ou soin. */
+export interface BarPreview {
+  damage?: number;
+  heal?: number;
+}
+
 export function Bar({
   value,
   max,
@@ -164,6 +170,7 @@ export function Bar({
   color,
   height = "h-3.5",
   label,
+  preview,
 }: {
   value: number;
   max: number;
@@ -171,10 +178,16 @@ export function Bar({
   color: string;
   height?: string;
   label?: string;
+  preview?: BarPreview;
 }) {
   const total = Math.max(max, value + shield);
-  const valuePct = (Math.max(0, value) / total) * 100;
+  const hp = Math.max(0, value);
+  const valuePct = (hp / total) * 100;
   const shieldPct = (shield / total) * 100;
+  const damage = preview?.damage ?? 0;
+  const shieldLoss = Math.min(shield, damage);
+  const hpLoss = Math.min(hp, damage - shieldLoss);
+  const heal = Math.min(preview?.heal ?? 0, max - hp);
   return (
     <div
       className={`relative ${height} overflow-hidden rounded-full border border-black/60 bg-black/50`}
@@ -189,6 +202,24 @@ export function Bar({
         <div
           className="absolute inset-y-0 bg-gold-bright/80 transition-[width,left] duration-500"
           style={{ left: `${valuePct}%`, width: `${shieldPct}%` }}
+        />
+      )}
+      {hpLoss > 0 && (
+        <div
+          className="animate-preview absolute inset-y-0 bg-[repeating-linear-gradient(135deg,rgba(255,255,255,0.85)_0_4px,rgba(255,255,255,0.35)_4px_8px)]"
+          style={{ left: `${((hp - hpLoss) / total) * 100}%`, width: `${(hpLoss / total) * 100}%` }}
+        />
+      )}
+      {shieldLoss > 0 && (
+        <div
+          className="animate-preview absolute inset-y-0 bg-[repeating-linear-gradient(135deg,rgba(0,0,0,0.55)_0_4px,transparent_4px_8px)]"
+          style={{ left: `${valuePct + ((shield - shieldLoss) / total) * 100}%`, width: `${(shieldLoss / total) * 100}%` }}
+        />
+      )}
+      {heal > 0 && (
+        <div
+          className="animate-preview absolute inset-y-0 bg-leaf/70"
+          style={{ left: `${valuePct}%`, width: `${(heal / total) * 100}%` }}
         />
       )}
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.18),transparent_55%)]" />
@@ -258,5 +289,62 @@ export function Gold({ amount, className = "" }: { amount: number; className?: s
       {fmt(amount)}
       <span className="sr-only">pièces d&apos;or</span>
     </span>
+  );
+}
+
+const SHEET_ROWS: { key: keyof Stats; label: string; format: (n: number) => string; hint?: string }[] = [
+  { key: "maxHp", label: "PV max", format: fmt },
+  { key: "ad", label: "Dégâts d'attaque (AD)", format: fmt },
+  { key: "ap", label: "Puissance", format: fmt },
+  { key: "armor", label: "Armure", format: fmt },
+  { key: "mr", label: "Résistance magique", format: fmt },
+  { key: "crit", label: "Coup critique", format: pct, hint: "Chance qu'une attaque inflige ×1,75" },
+  { key: "attackSpeed", label: "Double frappe", format: pct, hint: "Chance qu'une attaque frappe deux fois" },
+  { key: "lifesteal", label: "Vol de vie", format: pct, hint: "Part des dégâts d'attaque rendue en PV" },
+  { key: "onHitCurrentHp", label: "Dégâts sur PV actuels", format: pct, hint: "Bonus des attaques, en % des PV actuels de la cible" },
+  { key: "thorns", label: "Renvoi de dégâts", format: pct, hint: "Part des dégâts d'attaque subis renvoyée" },
+  { key: "hpRegenPct", label: "Régénération de PV", format: (n) => `${(n * 100).toFixed(1).replace(".", ",")} %/tour` },
+  { key: "maxResource", label: "Ressource max", format: fmt },
+  { key: "resourceRegen", label: "Régénération de ressource", format: (n) => `${fmt(n)}/tour` },
+];
+
+const reduction = (resist: number) => (resist >= 0 ? 1 - 100 / (100 + resist) : -(1 - 100 / (100 - resist)));
+
+/**
+ * Fiche de stats complète. `current` inclut les bonus et malus en cours ;
+ * l'écart avec `base` est affiché en vert ou en rouge.
+ */
+export function StatSheet({ base, current = base, compact = false }: { base: Stats; current?: Stats; compact?: boolean }) {
+  const rows = SHEET_ROWS.filter((r) => !(r.key === "maxResource" || r.key === "resourceRegen") || base.maxResource > 0);
+  const delta = (key: keyof Stats) => current[key] - base[key];
+  return (
+    <dl className={`grid gap-x-4 ${compact ? "grid-cols-1 text-xs" : "grid-cols-1 text-sm sm:grid-cols-2"}`}>
+      {rows.map((r) => {
+        const d = delta(r.key);
+        const changed = Math.abs(d) > 1e-6;
+        return (
+          <div key={r.key} className="flex items-baseline justify-between gap-2 border-b border-line/50 py-0.5" title={r.hint}>
+            <dt className={current[r.key] === 0 && !changed ? "text-dim" : "text-muted"}>{r.label}</dt>
+            <dd className="font-semibold tabular-nums">
+              {r.format(current[r.key])}
+              {changed && (
+                <span className={`ml-1 text-[11px] ${d > 0 ? "text-leaf" : "text-blood"}`}>
+                  ({d > 0 ? "+" : "−"}
+                  {r.format(Math.abs(d))})
+                </span>
+              )}
+            </dd>
+          </div>
+        );
+      })}
+      <div className="flex items-baseline justify-between gap-2 border-b border-line/50 py-0.5" title="Part des dégâts physiques bloqués par l'armure">
+        <dt className="text-muted">Réduction physique</dt>
+        <dd className="font-semibold tabular-nums">{pct(reduction(current.armor))}</dd>
+      </div>
+      <div className="flex items-baseline justify-between gap-2 border-b border-line/50 py-0.5" title="Part des dégâts magiques bloqués par la résistance magique">
+        <dt className="text-muted">Réduction magique</dt>
+        <dd className="font-semibold tabular-nums">{pct(reduction(current.mr))}</dd>
+      </div>
+    </dl>
   );
 }

@@ -38,7 +38,7 @@ describe("joueur simulé", () => {
     for (const c of CHAMPIONS) {
       const build = BUILDS[c.id];
       expect(build, c.id).toBeDefined();
-      for (const id of [...build.early, ...build.core, build.versusMagic, build.versusPhysical]) expect(ids.has(id), id).toBe(true);
+      for (const id of [...build.core, build.versusMagic, build.versusPhysical]) expect(ids.has(id), id).toBe(true);
     }
   });
 

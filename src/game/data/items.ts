@@ -11,6 +11,8 @@ export interface ItemDef {
   kind: ItemKind;
   description: string;
   stats?: Partial<Stats>;
+  /** Légendaires : composants absorbés à l'achat (leur prix est déduit). */
+  from?: string[];
   /** Potions : soin et ressource rendus, en % du max. Ne consomme pas le tour. */
   potion?: { healPct: number; resourcePct?: number };
 }
@@ -82,18 +84,18 @@ export const ITEMS: ItemDef[] = [
   { id: "sapphire-crystal", name: "Cristal de saphir", ddId: "1027", cost: 300, kind: "component", description: "+150 mana ou énergie max", stats: { maxResource: 150 } },
 
   // Légendaires
-  { id: "infinity-edge", name: "Lame d'infini", ddId: "3031", cost: 3400, kind: "legendary", description: "+65 AD, +25 % de critique", stats: { ad: 65, crit: 0.25 } },
-  { id: "bloodthirster", name: "Soif-de-sang", ddId: "3072", cost: 3400, kind: "legendary", description: "+80 AD, 15 % de vol de vie", stats: { ad: 80, lifesteal: 0.15 } },
-  { id: "botrk", name: "Lame du roi déchu", ddId: "3153", cost: 3200, kind: "legendary", description: "+40 AD, +25 % de double frappe, 8 % de vol de vie. Les attaques infligent 6 % des PV actuels de la cible.", stats: { ad: 40, attackSpeed: 0.25, lifesteal: 0.08, onHitCurrentHp: 0.06 } },
-  { id: "phantom-dancer", name: "Danseur fantôme", ddId: "3046", cost: 2650, kind: "legendary", description: "+25 % de critique, +35 % de double frappe", stats: { crit: 0.25, attackSpeed: 0.35 } },
-  { id: "steraks-gage", name: "Gage de Sterak", ddId: "3053", cost: 3100, kind: "legendary", description: "+450 PV, +45 AD", stats: { maxHp: 450, ad: 45 } },
-  { id: "rabadons", name: "Coiffe de Rabadon", ddId: "3089", cost: 3600, kind: "legendary", description: "+140 puissance", stats: { ap: 140 } },
-  { id: "zhonyas", name: "Sablier de Zhonya", ddId: "3157", cost: 3250, kind: "legendary", description: "+105 puissance, +50 armure", stats: { ap: 105, armor: 50 } },
-  { id: "ludens", name: "Compagnon de Luden", ddId: "6655", cost: 2900, kind: "legendary", description: "+95 puissance, +300 mana ou énergie max", stats: { ap: 95, maxResource: 300 } },
-  { id: "warmogs", name: "Armure de Warmog", ddId: "3083", cost: 3100, kind: "legendary", description: "+800 PV, régénère 3 % des PV max par tour", stats: { maxHp: 800, hpRegenPct: 0.03 } },
-  { id: "thornmail", name: "Cotte épineuse", ddId: "3075", cost: 2450, kind: "legendary", description: "+150 PV, +70 armure, renvoie 25 % des dégâts d'attaque subis", stats: { maxHp: 150, armor: 70, thorns: 0.25 } },
-  { id: "force-of-nature", name: "Force de la nature", ddId: "4401", cost: 2800, kind: "legendary", description: "+400 PV, +70 résistance magique", stats: { maxHp: 400, mr: 70 } },
-  { id: "sunfire", name: "Égide de feu solaire", ddId: "3068", cost: 2700, kind: "legendary", description: "+450 PV, +50 armure, régénère 1 % des PV max par tour", stats: { maxHp: 450, armor: 50, hpRegenPct: 0.01 } },
+  { id: "infinity-edge", name: "Lame d'infini", ddId: "3031", cost: 3400, kind: "legendary", from: ["pickaxe", "cloak-of-agility"], description: "+65 AD, +25 % de critique", stats: { ad: 65, crit: 0.25 } },
+  { id: "bloodthirster", name: "Soif-de-sang", ddId: "3072", cost: 3400, kind: "legendary", from: ["vampiric-scepter", "pickaxe"], description: "+80 AD, 15 % de vol de vie", stats: { ad: 80, lifesteal: 0.15 } },
+  { id: "botrk", name: "Lame du roi déchu", ddId: "3153", cost: 3200, kind: "legendary", from: ["vampiric-scepter", "dagger"], description: "+40 AD, +25 % de double frappe, 8 % de vol de vie. Les attaques infligent 6 % des PV actuels de la cible.", stats: { ad: 40, attackSpeed: 0.25, lifesteal: 0.08, onHitCurrentHp: 0.06 } },
+  { id: "phantom-dancer", name: "Danseur fantôme", ddId: "3046", cost: 2650, kind: "legendary", from: ["cloak-of-agility", "dagger"], description: "+25 % de critique, +35 % de double frappe", stats: { crit: 0.25, attackSpeed: 0.35 } },
+  { id: "steraks-gage", name: "Gage de Sterak", ddId: "3053", cost: 3100, kind: "legendary", from: ["ruby-crystal", "long-sword"], description: "+450 PV, +45 AD", stats: { maxHp: 450, ad: 45 } },
+  { id: "rabadons", name: "Coiffe de Rabadon", ddId: "3089", cost: 3600, kind: "legendary", from: ["blasting-wand", "amp-tome"], description: "+140 puissance", stats: { ap: 140 } },
+  { id: "zhonyas", name: "Sablier de Zhonya", ddId: "3157", cost: 3250, kind: "legendary", from: ["blasting-wand", "cloth-armor"], description: "+105 puissance, +50 armure", stats: { ap: 105, armor: 50 } },
+  { id: "ludens", name: "Compagnon de Luden", ddId: "6655", cost: 2900, kind: "legendary", from: ["blasting-wand", "sapphire-crystal"], description: "+95 puissance, +300 mana ou énergie max", stats: { ap: 95, maxResource: 300 } },
+  { id: "warmogs", name: "Armure de Warmog", ddId: "3083", cost: 3100, kind: "legendary", from: ["ruby-crystal", "ruby-crystal"], description: "+800 PV, régénère 3 % des PV max par tour", stats: { maxHp: 800, hpRegenPct: 0.03 } },
+  { id: "thornmail", name: "Cotte épineuse", ddId: "3075", cost: 2450, kind: "legendary", from: ["chain-vest", "ruby-crystal"], description: "+150 PV, +70 armure, renvoie 25 % des dégâts d'attaque subis", stats: { maxHp: 150, armor: 70, thorns: 0.25 } },
+  { id: "force-of-nature", name: "Force de la nature", ddId: "4401", cost: 2800, kind: "legendary", from: ["null-magic-mantle", "ruby-crystal"], description: "+400 PV, +70 résistance magique", stats: { maxHp: 400, mr: 70 } },
+  { id: "sunfire", name: "Égide de feu solaire", ddId: "3068", cost: 2700, kind: "legendary", from: ["cloth-armor", "ruby-crystal"], description: "+450 PV, +50 armure, régénère 1 % des PV max par tour", stats: { maxHp: 450, armor: 50, hpRegenPct: 0.01 } },
 ];
 
 const byId = new Map(ITEMS.map((item) => [item.id, item]));
@@ -102,4 +104,27 @@ export function getItem(id: string): ItemDef {
   const item = byId.get(id);
   if (!item) throw new Error(`Objet inconnu : ${id}`);
   return item;
+}
+
+/** Légendaires qu'un composant permet de construire. */
+export function buildsInto(componentId: string): ItemDef[] {
+  return ITEMS.filter((i) => i.from?.includes(componentId));
+}
+
+/**
+ * Composants possédés qu'un légendaire absorberait, sous forme d'indices dans
+ * l'inventaire (un même composant ne compte qu'une fois par emplacement de recette).
+ */
+export function consumedComponents(owned: string[], itemId: string): number[] {
+  const used: number[] = [];
+  for (const part of getItem(itemId).from ?? []) {
+    const index = owned.findIndex((id, i) => id === part && !used.includes(i));
+    if (index !== -1) used.push(index);
+  }
+  return used;
+}
+
+/** Prix réel d'un objet, une fois déduits les composants possédés qu'il absorbe. */
+export function effectiveCost(owned: string[], itemId: string): number {
+  return getItem(itemId).cost - consumedComponents(owned, itemId).reduce((sum, i) => sum + getItem(owned[i]).cost, 0);
 }

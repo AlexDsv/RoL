@@ -1,7 +1,7 @@
 import { act, createBattle, createCombatant, effectiveStats } from "./battle";
 import { CHAMPIONS } from "./data/champions";
 import { getFighter } from "./data/fighters";
-import { getItem, MAX_ITEMS, MAX_POTIONS, SELL_RATIO } from "./data/items";
+import { consumedComponents, effectiveCost, getItem, MAX_ITEMS, MAX_POTIONS, SELL_RATIO } from "./data/items";
 import { BARON, DRAGONS, JUNGLE } from "./data/monsters";
 import { nextRandom, shuffle } from "./rng";
 import type { Archetype, BattleState, FighterDef, Stats } from "./types";
@@ -188,20 +188,23 @@ export type BuyBlock = "gold" | "full" | "elixir" | "potions" | null;
 
 export function buyBlock(run: RunState, itemId: string): BuyBlock {
   const item = getItem(itemId);
-  if (run.gold < item.cost) return "gold";
+  if (run.gold < effectiveCost(run.items, itemId)) return "gold";
   if (item.kind === "potion" && (run.potions[itemId] ?? 0) >= MAX_POTIONS) return "potions";
   if (item.kind === "elixir" && run.elixir) return "elixir";
-  if ((item.kind === "component" || item.kind === "legendary") && run.items.length >= MAX_ITEMS) return "full";
+  const freed = consumedComponents(run.items, itemId).length;
+  if ((item.kind === "component" || item.kind === "legendary") && run.items.length - freed >= MAX_ITEMS) return "full";
   return null;
 }
 
+/** Achète un objet ; un légendaire absorbe les composants de sa recette déjà possédés. */
 export function buyItem(run: RunState, itemId: string): RunState {
   if (run.status !== "map" || buyBlock(run, itemId) !== null) return run;
   const item = getItem(itemId);
-  const next = { ...run, gold: run.gold - item.cost };
+  const consumed = consumedComponents(run.items, itemId);
+  const next = { ...run, gold: run.gold - effectiveCost(run.items, itemId) };
   if (item.kind === "potion") next.potions = { ...run.potions, [itemId]: (run.potions[itemId] ?? 0) + 1 };
   else if (item.kind === "elixir") next.elixir = itemId;
-  else next.items = [...run.items, itemId];
+  else next.items = [...run.items.filter((_, i) => !consumed.includes(i)), itemId];
   return keepHpRatio(run, next);
 }
 

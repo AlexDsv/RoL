@@ -3,9 +3,9 @@ import { aiTurn } from "./ai";
 import { act, createBattle, createCombatant, DAMAGE_SCALE, effectiveStats, mitigate, spellBlock } from "./battle";
 import { CHAMPIONS } from "./data/champions";
 import { getFighter } from "./data/fighters";
-import { ITEMS } from "./data/items";
+import { buildsInto, effectiveCost, ITEMS } from "./data/items";
 import { BARON, DRAGONS, JUNGLE } from "./data/monsters";
-import { buyItem, finishBattle, newRun, sellItem, startBattle } from "./run";
+import { buyBlock, buyItem, finishBattle, newRun, sellItem, startBattle } from "./run";
 import { playBattle, simulateRun } from "./sim";
 import { describeSpell, formula } from "./describe";
 import type { BattleState } from "./types";
@@ -106,6 +106,36 @@ describe("partie", () => {
     run = sellItem(run, 0);
     expect(run.gold).toBe(650 + 245);
     expect(run.items).toEqual([]);
+  });
+
+  it("un légendaire absorbe les composants de sa recette et déduit leur prix complet", () => {
+    let run = { ...newRun("garen", 1), gold: 5000 };
+    run = buyItem(run, "ruby-crystal");
+    run = buyItem(run, "long-sword");
+    run = buyItem(run, "dagger");
+    expect(effectiveCost(run.items, "steraks-gage")).toBe(3100 - 400 - 350);
+    run = buyItem(run, "steraks-gage");
+    expect(run.gold).toBe(5000 - 400 - 350 - 300 - 2350);
+    expect(run.items).toEqual(["dagger", "steraks-gage"]);
+  });
+
+  it("une recette qui demande deux fois le même composant en absorbe deux", () => {
+    let run = { ...newRun("garen", 1), gold: 5000 };
+    run = buyItem(buyItem(run, "ruby-crystal"), "ruby-crystal");
+    expect(effectiveCost(run.items, "warmogs")).toBe(3100 - 800);
+    expect(buyItem(run, "warmogs").items).toEqual(["warmogs"]);
+  });
+
+  it("acheter un légendaire est possible inventaire plein si un composant de sa recette libère la place", () => {
+    const run = { ...newRun("garen", 1), gold: 10000, items: ["ruby-crystal", "dagger", "dagger", "dagger", "dagger", "dagger"] };
+    expect(buyBlock(run, "steraks-gage")).toBeNull();
+    expect(buyBlock(run, "infinity-edge")).toBe("full");
+  });
+
+  it("chaque composant sert à au moins un légendaire", () => {
+    for (const item of ITEMS.filter((i) => i.kind === "component")) {
+      expect(buildsInto(item.id).length, item.id).toBeGreaterThan(0);
+    }
   });
 
   it("une victoire fait avancer, une défaite termine la partie", () => {
