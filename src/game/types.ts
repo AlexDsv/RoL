@@ -117,6 +117,8 @@ export interface FighterDef {
   stats: BaseStats;
   passive: PassiveDef;
   spells: SpellDef[];
+  /** Difficulté d'une partie avec ce champion (1 facile à 3 difficile), mesurée par simulation. */
+  difficulty?: 1 | 2 | 3;
   /** Coefficient d'équilibrage appliqué à tous ses dégâts, soins et boucliers (1 par défaut). */
   power?: number;
   /** Bonus permanent obtenu en battant ce monstre (buffs de jungle, dragons). */

@@ -21,6 +21,8 @@ import type {
 export const CRIT_MULTIPLIER = 1.75;
 /** Une attaque de base occupe un tour entier : elle frappe plus fort que dans LoL. */
 export const ATTACK_POWER = 1.5;
+/** Multiplicateur global des dégâts : règle la durée moyenne des combats. */
+export const DAMAGE_SCALE = 1.3;
 /** À partir de ce round, la « mort subite » inflige des dégâts croissants aux deux camps. */
 export const SUDDEN_DEATH_ROUND = 25;
 
@@ -117,6 +119,7 @@ export function scaleValue(sc: Scaling, caster: Combatant, target: Combatant): n
 }
 
 export function mitigate(raw: number, type: DamageType, target: Stats): number {
+  raw *= DAMAGE_SCALE;
   if (type === "true") return Math.round(raw);
   const resist = type === "physical" ? target.armor : target.mr;
   const mult = resist >= 0 ? 100 / (100 + resist) : 2 - 100 / (100 - resist);
@@ -231,7 +234,7 @@ export function act(state: BattleState, action: Action): BattleState {
   const side = s.turn;
 
   if (action.kind === "potion") {
-    usePotion(s, side, action.itemId);
+    applyPotion(s, side, action.itemId);
     return s;
   }
   if (action.kind === "spell") {
@@ -266,7 +269,7 @@ function checkWinner(s: BattleState, lastActor: Side): boolean {
   else if (s[lastActor].hp <= 0) s.winner = other;
   if (s.winner) {
     const loser = s[opponent(s.winner)];
-    log(s, { side: "system", text: `${loser.name} est vaincu !`, tone: "info" });
+    log(s, { side: "system", text: `${loser.name} tombe au combat !`, tone: "info" });
   }
   return s.winner !== null;
 }
@@ -417,8 +420,8 @@ function castSpell(s: BattleState, side: Side, key: SpellKey) {
     d.hp > 0 &&
     !d.statuses.some((st) => st.id === "tenacity")
   ) {
-    addStatus(d, { id: `stun-${side}`, label: "Étourdi", kind: "stun", turns: 1 });
-    log(s, { side, text: `${passive.name} : ${d.name} est étourdi !`, tone: "control" });
+    addStatus(d, { id: `stun-${side}`, label: "Étourdissement", kind: "stun", turns: 1 });
+    log(s, { side, text: `${passive.name} étourdit ${d.name} !`, tone: "control" });
   }
 }
 
@@ -453,15 +456,15 @@ function applyEffect(s: BattleState, side: Side, effect: Effect, spell: SpellDef
     }
     case "stun": {
       if (d.statuses.some((st) => st.id === "tenacity")) {
-        log(s, { side, text: `${d.name} est insensible (Ténacité).`, tone: "info" });
+        log(s, { side, text: `Ténacité : ${d.name} résiste à l'étourdissement.`, tone: "info" });
         return 0;
       }
       if (effect.chance !== undefined && rand(s) >= effect.chance) {
         log(s, { side, text: `${d.name} résiste à l'étourdissement.`, tone: "info" });
         return 0;
       }
-      addStatus(d, { id: `stun-${side}`, label: "Étourdi", kind: "stun", turns: effect.turns });
-      log(s, { side, text: `${d.name} est étourdi !`, tone: "control" });
+      addStatus(d, { id: `stun-${side}`, label: "Étourdissement", kind: "stun", turns: effect.turns });
+      log(s, { side, text: `${d.name} subit un étourdissement !`, tone: "control" });
       return 0;
     }
     case "dot": {
@@ -495,7 +498,7 @@ function applyEffect(s: BattleState, side: Side, effect: Effect, spell: SpellDef
   }
 }
 
-function usePotion(s: BattleState, side: Side, itemId: string) {
+function applyPotion(s: BattleState, side: Side, itemId: string) {
   const item = getItem(itemId);
   if (!item.potion) throw new Error(`${item.name} n'est pas une potion`);
   const c = s[side];
@@ -559,7 +562,7 @@ function beginTurn(s: BattleState, side: Side): boolean {
   }
   if (c.hp <= 0) {
     s.winner = opponent(side);
-    log(s, { side: "system", text: `${c.name} est vaincu !`, tone: "info" });
+    log(s, { side: "system", text: `${c.name} tombe au combat !`, tone: "info" });
     return false;
   }
 
@@ -569,7 +572,7 @@ function beginTurn(s: BattleState, side: Side): boolean {
   if (stunned) {
     // Un étourdissement est suivi d'un tour d'immunité, pour éviter les chaînes.
     c.statuses.push({ id: "tenacity", label: "Ténacité", kind: "buff", turns: 2 });
-    log(s, { side, text: `${c.name} est étourdi et passe son tour.`, tone: "control" });
+    log(s, { side, text: `Étourdissement : ${c.name} passe son tour.`, tone: "control" });
   }
   return stunned;
 }

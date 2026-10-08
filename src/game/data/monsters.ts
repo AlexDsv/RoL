@@ -72,7 +72,7 @@ export const JUNGLE: FighterDef[] = [
     passive: { kind: "bleedOnHit", name: "Crocs", description: "Les morsures font saigner.", amount: { base: 35 }, turns: 3 },
     spells: [
       spell("Q", "Morsure", "Une morsure qui nourrit la meute.", 0, 2, [dmg("physical", { base: 260 }), heal({ base: 170 })]),
-      spell("W", "Hurlement", "La meute s'enrage et intimide.", 0, 4, [buff("ad", 40, 2, "Hurlement : +40 AD"), debuff("ad", 25, 2, "Intimidé : -25 AD")]),
+      spell("W", "Hurlement", "La meute s'enrage et intimide.", 0, 4, [buff("ad", 40, 2, "Hurlement : +40 AD"), debuff("ad", 25, 2, "Intimidation : -25 AD")]),
     ],
     reward: { label: "Instinct de meute : +6 % de double frappe", stats: { attackSpeed: 0.06 } },
   },
@@ -148,7 +148,7 @@ export const DRAGONS: FighterDef[] = [
     stats: monsterStats({ hp: 7100, ad: 276, armor: 100, mr: 100 }),
     passive: { kind: "regen", name: "Marée montante", description: "Régénère 1 % des PV max par tour.", pct: 0.01 },
     spells: [
-      spell("Q", "Raz-de-marée", "Une vague écrasante.", 0, 2, [dmg("magic", { base: 355 }), debuff("attackSpeed", 0.3, 2, "Trempé")]),
+      spell("Q", "Raz-de-marée", "Une vague écrasante.", 0, 2, [dmg("magic", { base: 355 }), debuff("attackSpeed", 0.3, 2, "Trempage")]),
       spell("W", "Source de vie", "Les eaux le soignent.", 0, 3, [heal({ base: 460 })]),
       spell("R", "Maelström", "Un tourbillon dévastateur.", 0, 5, [dmg("magic", { base: 180 }, 4)]),
     ],
@@ -179,7 +179,7 @@ export const DRAGONS: FighterDef[] = [
     passive: { kind: "stunEveryNSpells", name: "Surcharge", description: "Tous les 3 sorts, la décharge étourdit.", n: 3 },
     spells: [
       spell("Q", "Arc électrique", "Un éclair qui rebondit.", 0, 1, [dmg("magic", { base: 165 }, 2)]),
-      spell("W", "Champ magnétique", "Affaiblit les défenses de la cible.", 0, 3, [debuff("armor", 35, 2, "Démagnétisé : -35 armure"), debuff("mr", 35, 2, "Démagnétisé : -35 RM")]),
+      spell("W", "Champ magnétique", "Affaiblit les défenses de la cible.", 0, 3, [debuff("armor", 35, 2, "Démagnétisation : -35 armure"), debuff("mr", 35, 2, "Démagnétisation : -35 RM")]),
       spell("R", "Tempête hextech", "Une décharge massive.", 0, 5, [dmg("magic", { base: 720 }), stun(1, 0.5)]),
     ],
     reward: { label: "Drake hextech : +8 % critique et +6 % double frappe", stats: { crit: 0.08, attackSpeed: 0.06 } },
@@ -210,10 +210,10 @@ export const BARON: FighterDef = {
   stats: monsterStats({ hp: 16550, ad: 373, armor: 130, mr: 120 }),
   passive: { kind: "everyNthAttack", name: "Présence du Néant", description: "Toutes les 2 attaques, inflige des dégâts bruts.", n: 2, bonus: { base: 225 }, type: "true" },
   spells: [
-    spell("Q", "Acide corrosif", "Un jet d'acide qui ronge les défenses.", 0, 2, [dmg("magic", { base: 420 }), debuff("armor", 30, 2, "Corrodé : -30 armure"), debuff("mr", 30, 2, "Corrodé : -30 RM")]),
+    spell("Q", "Acide corrosif", "Un jet d'acide qui ronge les défenses.", 0, 2, [dmg("magic", { base: 420 }), debuff("armor", 30, 2, "Corrosion : -30 armure"), debuff("mr", 30, 2, "Corrosion : -30 RM")]),
     spell("W", "Tentacules du Néant", "Des tentacules jaillissent du sol.", 0, 3, [dmg("physical", { base: 180 }, 3), stun(1, 0.5)]),
     spell("E", "Frappe du Néant", "Un coup de queue titanesque.", 0, 3, [dmg("physical", { base: 610 })]),
-    spell("R", "Souffle du Néant", "Une vague d'énergie du Néant.", 0, 5, [dmg("magic", { base: 1045 }), debuff("ad", 40, 2, "Affaibli : -40 AD")]),
+    spell("R", "Souffle du Néant", "Une vague d'énergie du Néant.", 0, 5, [dmg("magic", { base: 1045 }), debuff("ad", 40, 2, "Affaiblissement : -40 AD")]),
   ],
   phases: [
     { below: 0.6, label: "Le Baron s'enrage ! (+60 AD, +60 armure)", buff: { ad: 60, armor: 60 } },

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { aiTurn } from "./ai";
-import { act, createBattle, createCombatant, effectiveStats, mitigate, spellBlock } from "./battle";
+import { act, createBattle, createCombatant, DAMAGE_SCALE, effectiveStats, mitigate, spellBlock } from "./battle";
 import { CHAMPIONS } from "./data/champions";
 import { getFighter } from "./data/fighters";
 import { ITEMS } from "./data/items";
@@ -31,9 +31,10 @@ describe("données", () => {
 describe("combat", () => {
   it("les résistances réduisent les dégâts, les dégâts bruts les ignorent", () => {
     const stats = effectiveStats(createCombatant(getFighter("garen"), 1));
-    expect(mitigate(100, "physical", { ...stats, armor: 100 })).toBe(50);
-    expect(mitigate(100, "magic", { ...stats, mr: 0 })).toBe(100);
-    expect(mitigate(100, "true", { ...stats, armor: 300 })).toBe(100);
+    const raw = 100 / DAMAGE_SCALE;
+    expect(mitigate(raw, "physical", { ...stats, armor: 100 })).toBe(50);
+    expect(mitigate(raw, "magic", { ...stats, mr: 0 })).toBe(100);
+    expect(mitigate(raw, "true", { ...stats, armor: 300 })).toBe(100);
   });
 
   it("une attaque passe la main à l'adversaire", () => {

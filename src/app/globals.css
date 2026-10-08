@@ -1,26 +1,147 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@theme {
+  --color-abyss: #010a13;
+  --color-night: #091428;
+  --color-panel: #0d1a2b;
+  --color-panel-2: #13243a;
+  --color-line: #1f3349;
+  --color-gold: #c8aa6e;
+  --color-gold-bright: #f0e6d2;
+  --color-gold-dark: #785a28;
+  --color-teal: #0ac8b9;
+  --color-sky: #3fa7e0;
+  --color-blood: #e84057;
+  --color-leaf: #34c27a;
+  --color-ember: #f08a3c;
+  --color-violet: #a46cf0;
+  --color-muted: #a09b8c;
+  --color-dim: #6b7280;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --font-display: var(--font-cinzel), "Times New Roman", serif;
+  --font-sans: var(--font-inter), system-ui, sans-serif;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  --animate-shake: shake 0.35s ease-in-out;
+  --animate-rise: rise 0.9s ease-out forwards;
+  --animate-glow: glow 2.4s ease-in-out infinite;
+  --animate-fade-in: fade-in 0.3s ease-out;
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-3px); }
+  }
+  @keyframes rise {
+    0% { opacity: 0; transform: translateY(8px) scale(0.9); }
+    20% { opacity: 1; transform: translateY(0) scale(1.05); }
+    100% { opacity: 0; transform: translateY(-36px) scale(1); }
+  }
+  @keyframes glow {
+    0%, 100% { box-shadow: 0 0 0 1px rgba(200, 170, 110, 0.5), 0 0 18px -4px rgba(200, 170, 110, 0.45); }
+    50% { box-shadow: 0 0 0 1px rgba(240, 230, 210, 0.8), 0 0 28px -2px rgba(200, 170, 110, 0.7); }
+  }
+  @keyframes fade-in {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: none; }
   }
 }
 
+:root {
+  color-scheme: dark;
+}
+
+html,
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-abyss);
+  color: var(--color-gold-bright);
+}
+
+body {
+  font-family: var(--font-sans);
+  background:
+    radial-gradient(1200px 600px at 50% -10%, rgba(10, 200, 185, 0.08), transparent 60%),
+    radial-gradient(900px 500px at 50% 110%, rgba(200, 170, 110, 0.07), transparent 60%),
+    var(--color-abyss);
+  background-attachment: fixed;
+}
+
+@layer components {
+  .title {
+    font-family: var(--font-display);
+    letter-spacing: 0.04em;
+    color: var(--color-gold-bright);
+  }
+
+  .panel {
+    position: relative;
+    border: 1px solid color-mix(in srgb, var(--color-gold) 28%, transparent);
+    background: linear-gradient(180deg, rgba(19, 36, 58, 0.92), rgba(9, 20, 40, 0.94));
+    border-radius: 0.75rem;
+    box-shadow: 0 12px 30px -18px rgba(0, 0, 0, 0.8);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 0.5rem;
+    padding: 0.55rem 1.1rem;
+    font-weight: 700;
+    font-size: 0.9rem;
+    transition: transform 0.12s ease, filter 0.12s ease, background 0.15s ease, opacity 0.15s ease;
+    user-select: none;
+  }
+  .btn:not(:disabled):hover {
+    filter: brightness(1.12);
+  }
+  .btn:not(:disabled):active {
+    transform: translateY(1px) scale(0.98);
+  }
+  .btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+  .btn:focus-visible {
+    outline: 2px solid var(--color-teal);
+    outline-offset: 2px;
+  }
+
+  .btn-primary {
+    color: #1a1206;
+    font-family: var(--font-display);
+    letter-spacing: 0.06em;
+    background: linear-gradient(180deg, #f0e6d2 0%, #c8aa6e 45%, #a07c3c 100%);
+    border: 1px solid #f0e6d2;
+    box-shadow: 0 0 0 1px rgba(120, 90, 40, 0.8), 0 6px 18px -8px rgba(200, 170, 110, 0.7);
+  }
+
+  .btn-ghost {
+    color: var(--color-gold-bright);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid color-mix(in srgb, var(--color-gold) 35%, transparent);
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    border-radius: 999px;
+    padding: 0.1rem 0.55rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    border: 1px solid color-mix(in srgb, var(--color-gold) 35%, transparent);
+    background: rgba(0, 0, 0, 0.3);
+    color: var(--color-gold);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
