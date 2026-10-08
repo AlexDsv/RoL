@@ -240,25 +240,34 @@ const TONE_CLASS: Record<NonNullable<LogEntry["tone"]>, string> = {
 };
 
 function CombatLog({ log }: { log: LogEntry[] }) {
-  const recent = log.slice(-12).reverse();
+  // Les entrées les plus récentes sont en bas, comme un chat ; les plus anciennes s'estompent en haut.
+  const recent = log.slice(-12);
+  const offset = log.length - recent.length;
   return (
-    <section className="panel h-36 overflow-hidden px-4 py-2 text-xs sm:h-52 sm:text-sm lg:h-64" aria-label="Journal de combat" aria-live="polite">
-      <ul className="space-y-0.5">
-        {recent.map((entry, i) => (
-          <li
-            key={log.length - i}
-            className={`${TONE_CLASS[entry.tone ?? "info"]} ${i === 0 ? "animate-fade-in" : ""}`}
-            style={{ opacity: 1 - i * 0.065 }}
-          >
-            <span
-              aria-hidden="true"
-              className={`mr-1.5 inline-block h-1.5 w-1.5 rounded-full align-middle ${
-                entry.side === "player" ? "bg-leaf" : entry.side === "enemy" ? "bg-blood" : "bg-gold"
-              }`}
-            />
-            {entry.text}
-          </li>
-        ))}
+    <section
+      className="panel h-36 overflow-hidden px-4 py-2 text-xs sm:h-52 sm:text-sm lg:h-64"
+      aria-label="Journal de combat"
+      aria-live="polite"
+    >
+      <ul className="flex h-full flex-col justify-end gap-0.5 overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,black_30%)]">
+        {recent.map((entry, i) => {
+          const age = recent.length - 1 - i;
+          return (
+            <li
+              key={offset + i}
+              className={`${TONE_CLASS[entry.tone ?? "info"]} ${age === 0 ? "animate-fade-in" : ""}`}
+              style={{ opacity: 1 - age * 0.065 }}
+            >
+              <span
+                aria-hidden="true"
+                className={`mr-1.5 inline-block h-1.5 w-1.5 rounded-full align-middle ${
+                  entry.side === "player" ? "bg-leaf" : entry.side === "enemy" ? "bg-blood" : "bg-gold"
+                }`}
+              />
+              {entry.text}
+            </li>
+          );
+        })}
       </ul>
     </section>
   );
